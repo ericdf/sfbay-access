@@ -155,9 +155,9 @@ const s = campaign.data.submission;
           {
             open && s.type === 'email' && s.email ? (
               <p>
-                The chatbot also gives you an "Open this email" link with your subject and note filled in.
-                Check that everything is true, then send it. If the link doesn't work, paste the note into an
-                email to <a href={mailtoLink(s.email)}>{s.email}</a>. The chatbot can't send it for you.
+                When you like the draft, ask the chatbot to <strong>"generate the mailto link"</strong>. Click
+                it to open the note in your email app for finishing touches, then send it. The subject line will
+                meet the agency's requirements. If the link doesn't work, paste the note into an email to <a href={mailtoLink(s.email)}>{s.email}</a>.
               </p>
             ) : (
               <p>Fix anything that isn't true, then send it through the route under "Who can act." The chatbot can't send it for you.</p>

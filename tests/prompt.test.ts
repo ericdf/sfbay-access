@@ -159,6 +159,8 @@ describe('chatbot hand-off links', () => {
     const p = buildPrompt({ ...sampleCampaign, email: 'clerk@example.gov', subjectPrefix: 'Public Comment – Not on Agenda' });
     expect(p).toContain('starts with "Public Comment – Not on Agenda"');
     expect(p).toContain('Write it from the note');
+    expect(p).toContain('When I ask you to "generate the mailto link"');
+    expect(p).toContain('I can say "generate the mailto link"');
     expect(p).toContain('mailto:clerk@example.gov?subject=...&body=...');
     expect(buildPrompt(sampleCampaign)).not.toContain('mailto:');
   });
