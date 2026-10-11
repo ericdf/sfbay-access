@@ -34,6 +34,7 @@ const pageUrl = new URL(href(`campaigns/${campaign.id}/`), Astro.site).href;
 const documented = new Set(d.activity_impacts.flatMap((i) => i.activities));
 const undocumented = d.relevant_activities.filter((a) => !documented.has(a));
 const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`Correction: ${d.title}`)}`;
+const editUrl = `${siteConfig.editBaseUrl}src/content/campaigns/${campaign.id}.md`;
 ---
 
 <BaseLayout title={d.title} description={d.summary} actionHref={effectiveStatus !== 'closed' ? '#voice' : undefined}>
@@ -207,7 +208,8 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
       <h2 id="checked">Last checked</h2>
       <p>
         {lastVerified ? `Action details last verified ${lastVerified}.` : 'Action details have not yet been verified against primary sources.'}
-        See something wrong or out of date? <a href={correctionUrl}>Report a correction</a>.
+        See something wrong or out of date? <a href={editUrl}>Fix it on GitHub</a> (GitHub opens a pull request for
+        you), or <a href={correctionUrl}>tell us what's wrong</a>.
       </p>
     </section>
   </div>

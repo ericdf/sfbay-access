@@ -57,8 +57,15 @@ import { STATUS_LABELS, STATUSES } from '../lib/campaign-validation';
     <h2>Corrections and maintenance</h2>
     <p>
       Campaigns are plain text files in the <a href={siteConfig.repoUrl}>project repository</a>, so anyone can
-      see what changed and when. To report an inaccuracy, an outdated date or contact, or evidence about how a
-      decision affects your activity, <a href={siteConfig.correctionsUrl}>open an issue</a>.
+      see what changed and when, and anyone can propose a fix. Pull requests are the fastest way to correct a
+      date, contact or fact, add a source, or add a new campaign. Each campaign page has a "Fix it on GitHub"
+      link that opens the file in GitHub's editor and creates the pull request for you; no git knowledge
+      needed. See the <a href={`${siteConfig.repoUrl}/blob/main/CONTRIBUTING.md`}>contributing guide</a> for
+      what reviewers check.
+    </p>
+    <p>
+      If you'd rather not edit, <a href={siteConfig.correctionsUrl}>open an issue</a> describing the problem or
+      the evidence about how a decision affects your activity.
     </p>
 
     <h2>If SFBA adopts it</h2>

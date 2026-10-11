@@ -24,6 +24,8 @@ export const siteConfig = {
   /** Where people report inaccuracies. */
   correctionsUrl: 'https://github.com/ericdf/sfbay-access/issues/new',
   repoUrl: 'https://github.com/ericdf/sfbay-access',
+  /** Base for "Edit on GitHub" links; GitHub forks and opens a pull request for the visitor. */
+  editBaseUrl: 'https://github.com/ericdf/sfbay-access/edit/main/',
 
   report: {
     title: 'The State of Recreational Access to the San Francisco Bay: 2026',
