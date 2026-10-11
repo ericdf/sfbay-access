@@ -30,7 +30,8 @@ const campaigns = defineCollection({
         url: nullableString,
         email: z.string().email().nullable().optional(),
         instructions: nullableString,
-        subject: nullableString,
+        /** Required start of the subject line; the chatbot writes the rest from the note. */
+        subject_prefix: nullableString,
       }),
       asks: z.array(z.string().min(5)),
       relevant_activities: z.array(z.enum(ACTIVITY_IDS)).default([]),

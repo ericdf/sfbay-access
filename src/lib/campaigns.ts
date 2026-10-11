@@ -55,7 +55,7 @@ export function routeDescription(c: Campaign): string {
   }
   switch (s.type) {
     case 'email':
-      return `Email to ${s.email}${s.subject ? `, subject line "${s.subject}"` : ''}${s.instructions ? ` (${s.instructions})` : ''}`;
+      return `Email to ${s.email}${s.instructions ? ` (${s.instructions})` : ''}`;
     case 'webform':
       return `The agency's web comment form at ${s.url}${s.instructions ? ` (${s.instructions})` : ''}`;
     case 'meeting':
@@ -72,6 +72,8 @@ export function toPromptCampaign(c: Campaign): PromptCampaign {
     place: c.data.place,
     agency: verified ? c.data.agency : `${c.data.agency} (identified from the SFBA report; not yet independently verified)`,
     route: routeDescription(c),
+    email: verified && c.data.submission.type === 'email' ? (c.data.submission.email ?? null) : null,
+    subjectPrefix: verified ? (c.data.submission.subject_prefix ?? null) : null,
     asks: c.data.asks,
     reportTitle: siteConfig.report.title,
     reportPages: `${formatPages(c.data.source.report_pages)} (printed page numbers)`,

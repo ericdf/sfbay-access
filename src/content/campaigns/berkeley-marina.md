@@ -22,7 +22,7 @@ submission:
   type: email  # email | webform | meeting | none
   url: null
   email: publiccomment@bcdc.ca.gov
-  subject: Berkeley Marina paid parking permit application
+  subject_prefix: Berkeley Marina paid parking permit  # BCDC asks for the project name in the subject
   instructions: >-
     Send it now; BCDC accepts comments on pending permits before a hearing is scheduled. Once the
     hearing is on a Commission agenda, comments are due by 10:00 AM the Wednesday before the meeting.

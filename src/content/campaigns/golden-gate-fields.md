@@ -11,7 +11,7 @@ other_decision_makers:
 decision_type: Purchase agreement vote, then 2027–29 park planning
 # The Oct 20 agenda isn't posted yet, so there is no verified deadline. When it is posted:
 # set verified_deadline to the day before the meeting, put the exact item title in
-# submission.subject, and update last_verified and verification_source_url.
+# submission.subject_prefix, and update last_verified and verification_source_url.
 verified_deadline: null
 last_verified: 2026-10-11
 verification_source_url: https://ebparks.primegov.com/Portal/Meeting?meetingTemplateId=6913
@@ -25,7 +25,7 @@ submission:
   type: email  # email | webform | meeting | none
   url: null
   email: clerkoftheboard@ebparks.org
-  subject: Public Comment – Golden Gate Fields
+  subject_prefix: Public Comment – Golden Gate Fields  # EBRPD format; use the agenda item title once posted
   instructions: >-
     Send your comment now; you don't need to wait for the agenda. EBRPD asks for written comments
     by 3:00 PM the day before the meeting (Monday, October 19 for an October 20 vote). Once the

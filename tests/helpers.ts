@@ -23,6 +23,8 @@ export const sampleCampaign: PromptCampaign = {
   place: 'Example Beach',
   agency: 'Example Regional Park District',
   route: 'No verified submission route yet.',
+  email: null,
+  subjectPrefix: null,
   asks: ['Keep a usable beach and a defined route into the water.', 'Fund sand nourishment before spring.'],
   reportTitle: 'The State of Recreational Access to the San Francisco Bay: 2026',
   reportPages: 'pp. 11–13 (printed page numbers)',

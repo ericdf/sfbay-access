@@ -15,7 +15,7 @@ export interface Submission {
   url?: string | null;
   email?: string | null;
   instructions?: string | null;
-  subject?: string | null;
+  subject_prefix?: string | null;
 }
 
 export interface ActivityImpact {

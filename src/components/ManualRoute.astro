@@ -12,7 +12,7 @@ const d = campaign.data;
 const open = solicitsComments(d);
 const s = d.submission;
 const outline = [
-  `Subject: ${d.submission.subject ?? d.title}`,
+  `Subject: ${d.submission.subject_prefix ? `${d.submission.subject_prefix}: ` : ''}(a few words of your own)`,
   '',
   `To: ${d.agency}`,
   '',
@@ -57,7 +57,7 @@ const outlineId = `outline-${campaign.id}`;
       <>
         {s.type === 'email' && s.email && (
           <p>
-            Email <a href={mailtoLink(s.email, s.subject ?? d.title)}>{s.email}</a>.{s.instructions && ` ${s.instructions}`}
+            Email <a href={mailtoLink(s.email)}>{s.email}</a>.{s.subject_prefix && ` Start the subject line with “${s.subject_prefix}”.`}{s.instructions && ` ${s.instructions}`}
           </p>
         )}
         {s.type === 'webform' && s.url && (

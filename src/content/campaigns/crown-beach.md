@@ -22,7 +22,7 @@ submission:
   type: email
   url: null
   email: clerkoftheboard@ebparks.org
-  subject: Public Comment – Not on Agenda
+  subject_prefix: Public Comment – Not on Agenda  # required by EBRPD
   instructions: >-
     Crown Beach isn't on a board agenda, so EBRPD's rules call for the subject line "Public Comment –
     Not on Agenda". The board meets the first and third Tuesday of each month at 1:00 PM, and written

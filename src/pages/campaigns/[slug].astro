@@ -95,8 +95,8 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
           {
             open ? (
               <>
-                {d.submission.type === 'email' && d.submission.email && <a href={mailtoLink(d.submission.email, d.submission.subject ?? d.title)}>{d.submission.email}</a>}
-                {d.submission.subject && <span> (subject: “{d.submission.subject}”)</span>}
+                {d.submission.type === 'email' && d.submission.email && <a href={mailtoLink(d.submission.email)}>{d.submission.email}</a>}
+                {d.submission.subject_prefix && <span> (subject must start with “{d.submission.subject_prefix}”)</span>}
                 {(d.submission.type === 'webform' || d.submission.type === 'meeting') && d.submission.url && (
                   <a href={d.submission.url}>{d.submission.type === 'webform' ? 'Agency comment form' : 'Meeting details'}</a>
                 )}

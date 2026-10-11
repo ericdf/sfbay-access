@@ -14,6 +14,10 @@ export interface PromptCampaign {
   agency: string;
   /** Plain-language description of the verified route, or why there isn't one. */
   route: string;
+  /** Verified email recipient, if comments go by email. */
+  email?: string | null;
+  /** Required start of the subject line, if the agency has one. */
+  subjectPrefix?: string | null;
   asks: string[];
   reportTitle: string;
   /** e.g. "pp. 6–9, 31 (printed page numbers)" */
@@ -109,8 +113,8 @@ export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT
     'If I have given you any of the information above, draft a concise, persuasive',
     'email or public comment in my own voice now, using only what I gave. Do not ask',
     'follow-up questions first. Do not ask which request matters most: choose the one',
-    'or two that best fit my activities and concerns. If I said I don\'t use the place',
-    'yet, write as someone who wants access, not as a regular user.',
+    'or two that best fit my activities and concerns.',
+    `If I said I don't use ${c.place} yet, write as someone who wants access, not as a regular user.`,
   );
 
   if (!hasPersonalInput(input)) {
@@ -137,6 +141,7 @@ export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT
     'writing to express my concern" or "Thank you for your consideration of this',
     'important matter." Officials discount comments that look copied.',
     '',
+    ...emailLines(c),
     'After the draft, ask me whether I want to change it: a different tone (more',
     'passionate, calmer, more formal, more personal), a different length, or a',
     'different point first. Keep revising until it sounds like me.',
@@ -147,6 +152,22 @@ export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT
   );
 
   return lines.join('\n');
+}
+
+/** Ask the chatbot to write the subject from the note and hand back a ready-to-send mailto link. */
+function emailLines(c: PromptCampaign): string[] {
+  if (!c.email) return [];
+  const subject = c.subjectPrefix
+    ? `starts with "${c.subjectPrefix}" (the agency requires this), then a colon and a few words that sum up my note`
+    : 'sums up my note in a few words';
+  return [
+    'With each draft, also give me:',
+    `1. A subject line that ${subject}. Write it from the note, not from this campaign's title.`,
+    `2. A clickable email link labeled "Open this email": mailto:${c.email}?subject=...&body=...`,
+    '   with the subject and the full note URL-encoded (spaces as %20, line breaks as %0A).',
+    '3. The subject and the note as plain text, in case the link does not open or cuts off.',
+    '',
+  ];
 }
 
 export type HandoffMode = 'prefill' | 'copy';
@@ -173,8 +194,10 @@ export function claudeHandoff(_prompt: string, opts: { baseUrl: string }): { url
 }
 
 /** mailto: link for verified email recipients only. Body stays an outline, never a fabricated statement. */
-export function mailtoLink(email: string, subject: string, body = ''): string {
-  const params = [`subject=${encodeURIComponent(subject)}`];
+export function mailtoLink(email: string, subject = '', body = ''): string {
+  const params: string[] = [];
+  if (subject) params.push(`subject=${encodeURIComponent(subject)}`);
   if (body) params.push(`body=${encodeURIComponent(body)}`);
-  return `mailto:${encodeURIComponent(email).replace(/%40/g, '@')}?${params.join('&')}`;
+  const address = encodeURIComponent(email).replace(/%40/g, '@');
+  return params.length ? `mailto:${address}?${params.join('&')}` : `mailto:${address}`;
 }

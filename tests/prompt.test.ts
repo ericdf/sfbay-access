@@ -155,6 +155,18 @@ describe('chatbot hand-off links', () => {
     expect(url).not.toContain('?');
   });
 
+  it('asks the chatbot for a subject and mailto link written from the note', () => {
+    const p = buildPrompt({ ...sampleCampaign, email: 'clerk@example.gov', subjectPrefix: 'Public Comment – Not on Agenda' });
+    expect(p).toContain('starts with "Public Comment – Not on Agenda"');
+    expect(p).toContain('Write it from the note');
+    expect(p).toContain('mailto:clerk@example.gov?subject=...&body=...');
+    expect(buildPrompt(sampleCampaign)).not.toContain('mailto:');
+  });
+
+  it('builds a bare mailto link when there is no subject', () => {
+    expect(mailtoLink('comments@example.gov')).toBe('mailto:comments@example.gov');
+  });
+
   it('builds mailto links with an encoded subject', () => {
     expect(mailtoLink('comments@example.gov', 'Crown Beach & access?')).toBe(
       'mailto:comments@example.gov?subject=Crown%20Beach%20%26%20access%3F',
