@@ -538,8 +538,6 @@ summary {
   box-shadow: 0 4px 14px rgb(0 0 0 / 0.25);
   transition:
     top 0.25s ease,
-    opacity 0.2s ease,
-    visibility 0.2s,
     background-color 0.15s ease;
 }
 
@@ -560,13 +558,12 @@ summary {
   transform: translateY(-50%);
 }
 
-.take-action-arrow.is-past {
-  opacity: 0;
-  visibility: hidden;
-}
-
 .take-action-arrow.is-pointing .take-action-icon {
   transform: rotate(90deg);
+}
+
+.take-action-arrow.is-up .take-action-icon {
+  transform: rotate(180deg);
 }
 
 /* Keep the heading clear of the arrow when it lines up beside it. */

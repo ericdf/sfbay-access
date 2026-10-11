@@ -69,6 +69,7 @@ export function toPromptCampaign(c: Campaign): PromptCampaign {
   const verified = solicitsComments(c.data);
   return {
     title: c.data.title,
+    place: c.data.place,
     agency: verified ? c.data.agency : `${c.data.agency} (identified from the SFBA report; not yet independently verified)`,
     route: routeDescription(c),
     asks: c.data.asks,

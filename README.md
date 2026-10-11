@@ -2,7 +2,7 @@
 
 **Independent prototype based on SFBA's 2026 report — not endorsed or operated by SFBA.**
 
-A static, mobile-first site that turns findings from the San Francisco Boardsailing Association's report *The State of Recreational Access to the San Francisco Bay: 2026* into specific actions for anyone who uses the Bay: swimmers, paddlers, rowers, sailors, board sports, anglers and beach visitors. Visitors can draft a personal public comment with ChatGPT or Claude using their own account, or write one without AI. The site has no backend, no API keys, no accounts and no tracking.
+A static, mobile-first site that turns findings from the San Francisco Boardsailing Association's report *The State of Recreational Access to the San Francisco Bay: 2026* into specific actions for anyone who uses the Bay: swimmers, paddlers, rowers, sailors, board sports, anglers and beach visitors. Visitors can draft a personal public comment with ChatGPT, Claude or Gemini using their own account, or write one without AI. The site has no backend, no API keys, no accounts and no tracking.
 
 - Live preview: <https://ericdf.github.io/sfbay-access/>
 - Spec: [`docs/SFBA_Action_Center_Implementation_Spec.md`](docs/SFBA_Action_Center_Implementation_Spec.md)
@@ -29,6 +29,7 @@ Each campaign is one Markdown file in `src/content/campaigns/`. The front matter
 | `status` | `draft` (unverified; only shown in prototype mode, never collects comments), `monitoring` (being watched; no confirmed opportunity), `active` (verified and open), `closed` (ended; no action buttons). |
 | `priority` | 1 = most important. Used to order campaigns that have no verified deadline. |
 | `agency`, `other_decision_makers` | The primary decision-maker, plus anyone else involved. |
+| `place` | Short place name used in the composer questions ("How do you use Crown Beach?"). |
 | `asks` | 1–6 specific requests. The first one appears on the homepage card. |
 | `verified_deadline` | ISO date (`2026-11-15`). Only set it once confirmed in an official notice. Requires `last_verified` and `verification_source_url`. |
 | `timing_note` | One line for the homepage card when there's no verified deadline. |
@@ -92,7 +93,8 @@ The site never calls an AI API. It builds a self-contained prompt (`src/lib/prom
 
 - **Continue in Claude**: copies the prompt and opens `https://claude.ai/new` in a new tab, then shows paste instructions. Claude has no verified prefill parameter, so the site doesn't use one.
 - **Continue in ChatGPT**: same copy-and-open behavior by default. `chatbots.chatgptPrefill` turns on `https://chatgpt.com/?q=<prompt>` for prompts under `maxPrefillUrlLength`. It's **off** until manually tested (below). The prompt is copied to the clipboard either way.
-- **Copy prompt**: copies without opening anything.
+- **Gemini**: copy-and-open to `https://gemini.google.com/app`. No verified prefill parameter.
+- **Copy prompt** (step 1): copies without opening anything. The composer is laid out as three numbered steps: copy, open a chatbot and paste, then send.
 - If the clipboard is blocked, the full prompt opens in a selectable text box with instructions.
 - **Write without AI**: talking points, report findings by activity, the verified route (or "not yet verified"), and an editable outline. It's rendered as static HTML, so it works without JavaScript. A `mailto:` link appears only for verified email routes.
 
@@ -106,6 +108,7 @@ Automated tests confirmed this in headless Chromium: clicking "Continue in Claud
 | --- | --- |
 | Claude: copy, open and paste, signed in | ☐ |
 | Claude: signed out (login page, then paste after login) | ☐ |
+| Gemini: copy, open and paste, signed in / signed out | ☐ |
 | ChatGPT: copy, open and paste, signed in / signed out | ☐ |
 | ChatGPT `?q=` prefill (temporarily set `chatgptPrefill: true`), signed in / signed out, desktop / mobile | ☐ |
 | Clipboard denied (Firefox with permissions off; iOS) shows the manual copy box | ☐ |

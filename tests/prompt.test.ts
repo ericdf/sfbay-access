@@ -82,7 +82,7 @@ describe('buildPrompt', () => {
 
   it("includes the visitor's connection to the place", () => {
     const p = buildPrompt(sampleCampaign, { ...EMPTY_INPUT, connection: 'would_use' });
-    expect(p).toContain("My connection to this place (if provided): I don't use it yet, but would if access were better");
+    expect(p).toContain("My connection to Example Beach (if provided): I don't use it yet, but would if access were better");
     expect(p).not.toContain('I have not provided any personal details yet');
     expect(p).toContain('Do not ask\nfollow-up questions first');
   });
@@ -163,6 +163,7 @@ describe('chatbot hand-off links', () => {
 describe('seeded campaigns', () => {
   const toPrompt = (d: ReturnType<typeof loadCampaignFiles>[number]['data']): PromptCampaign => ({
     title: d.title,
+    place: d.place ?? d.title,
     agency: d.agency,
     route: 'No verified submission route yet.',
     asks: d.asks,

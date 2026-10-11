@@ -3,6 +3,7 @@ title: Protect recreational access at Berkeley Marina
 summary: Berkeley wants to charge for parking at the South Basin lots and turn waterfront parking over to a ferry terminal. Ask regulators to keep this publicly built park accessible.
 status: active  # draft | monitoring | active | closed
 priority: 2
+place: Berkeley Marina  # short name used in questions ("How do you use Berkeley Marina?")
 issue_area: Berkeley Marina, South Cove and South Basin
 agency: San Francisco Bay Conservation and Development Commission (BCDC)
 other_decision_makers:

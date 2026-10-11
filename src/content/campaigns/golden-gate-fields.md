@@ -3,6 +3,7 @@ title: Design water access into the new Golden Gate Fields park
 summary: The former racetrack is becoming a regional shoreline park, and the EBRPD board is expected to vote on buying it October 20. Ask the board to plan for launch areas, loading and parking, and to keep interim access open.
 status: active  # draft | monitoring | active | closed
 priority: 1
+place: Golden Gate Fields  # short name used in questions ("How do you use Golden Gate Fields?")
 issue_area: Golden Gate Fields and Racetrack (Albany Beach), Albany/Berkeley
 agency: East Bay Regional Park District (EBRPD) Board of Directors
 other_decision_makers:

@@ -3,6 +3,7 @@ title: Protect access to Crown Beach, Alameda
 summary: Crown Beach is running out of sand, and emergency rock is being stockpiled for winter. Ask that storm protection keep a usable beach and a way into the water.
 status: active  # draft | monitoring | active | closed
 priority: 3
+place: Crown Beach  # short name used in questions ("How do you use Crown Beach?")
 issue_area: Robert W. Crown Memorial State Beach, Alameda
 agency: East Bay Regional Park District (EBRPD) Board of Directors
 other_decision_makers:

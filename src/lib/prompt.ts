@@ -9,6 +9,8 @@ import { ACCESS_FACTORS, ACTIVITIES, CONNECTIONS } from './activities';
 /** Campaign data the composer needs, serialized into each campaign page. */
 export interface PromptCampaign {
   title: string;
+  /** Short place name, e.g. "Crown Beach" */
+  place: string;
   agency: string;
   /** Plain-language description of the verified route, or why there isn't one. */
   route: string;
@@ -99,7 +101,7 @@ export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT
 
   lines.push(
     '',
-    `My connection to this place (if provided): ${connection ?? 'Not provided'}`,
+    `My connection to ${c.place} (if provided): ${connection ?? 'Not provided'}`,
     `Activities I selected (if provided): ${describeActivities(input)}`,
     `How this decision affects my access (if provided): ${factors.length ? factors.join(', ') : 'Not provided'}`,
     `What matters to me (if provided): ${concern}`,
@@ -115,7 +117,7 @@ export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT
     lines.push(
       '',
       'I have not provided any personal details yet. Before drafting anything, ask me',
-      'up to TWO short questions: how I use or relate to this place, and what I want',
+      `up to TWO short questions: how I use or relate to ${c.place}, and what I want`,
       'decision-makers to understand. Do not write a letter that pretends to be personal.',
     );
   }
@@ -152,7 +154,11 @@ export function chatgptHandoff(
   return { url: opts.baseUrl, mode: 'copy' };
 }
 
-/** Claude link: no verified prefill parameter exists, so always copy-and-paste. */
+/** Claude and Gemini links: no verified prefill parameter exists, so always copy-and-paste. */
+export function copyOnlyHandoff(_prompt: string, opts: { baseUrl: string }): { url: string; mode: HandoffMode } {
+  return { url: opts.baseUrl, mode: 'copy' };
+}
+
 export function claudeHandoff(_prompt: string, opts: { baseUrl: string }): { url: string; mode: HandoffMode } {
   return { url: opts.baseUrl, mode: 'copy' };
 }

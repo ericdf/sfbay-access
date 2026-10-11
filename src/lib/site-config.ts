@@ -50,6 +50,8 @@ export const siteConfig = {
     chatgptUrl: 'https://chatgpt.com/',
     /** Claude has no verified prefill parameter: copy, then open. */
     claudeUrl: 'https://claude.ai/new',
+    /** Gemini has no verified prefill parameter either: copy, then open. */
+    geminiUrl: 'https://gemini.google.com/app',
     /** Deep links longer than this fall back to copy-and-open. */
     maxPrefillUrlLength: 6000,
   },

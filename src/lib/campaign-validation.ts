@@ -29,6 +29,7 @@ export interface CampaignData {
   summary: string;
   status: CampaignStatus;
   priority: number;
+  place?: string;
   issue_area: string;
   agency: string;
   other_decision_makers?: string[];

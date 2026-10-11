@@ -19,6 +19,7 @@ const data: ComposerData = {
     maxUrlLength: siteConfig.chatbots.maxPrefillUrlLength,
   },
   claude: { baseUrl: siteConfig.chatbots.claudeUrl },
+  gemini: { baseUrl: siteConfig.chatbots.geminiUrl },
 };
 // Safe to embed in a <script type="application/json">: escape "<" so nothing can close the tag.
 const json = JSON.stringify(data).replace(/</g, '\\u003c');
@@ -43,7 +44,7 @@ const s = campaign.data.submission;
 
   <noscript>
     <p class="notice">
-      The AI drafting helper needs JavaScript. You can still use the talking points and outline under
+      The AI drafting helper needs JavaScript. You can still use the talking points and outline under{' '}
       <a href="#write-without-ai">Write without AI</a>.
     </p>
   </noscript>
@@ -51,13 +52,13 @@ const s = campaign.data.submission;
   <div data-composer-ui hidden>
     <p>
       Answer a few optional questions. We turn your answers and this campaign's asks into a prompt you paste
-      into ChatGPT or Claude, which drafts a comment in your words. Nothing you enter is sent to this site
+      into ChatGPT, Claude or Gemini, which drafts a comment in your words. Nothing you enter is sent to this site
       or saved.
     </p>
 
     <form onsubmit="return false" aria-describedby={`privacy-${id}`}>
       <fieldset>
-        <legend>What's your connection to this place? <span class="hint">Optional. Pick one.</span></legend>
+        <legend>What's your connection to {campaign.data.place}? <span class="hint">Optional. Pick one.</span></legend>
         <div class="checkbox-grid">
           {
             CONNECTIONS.map((c) => (
@@ -71,7 +72,7 @@ const s = campaign.data.submission;
       </fieldset>
 
       <fieldset>
-        <legend>How do you use this part of the Bay? <span class="hint">Optional. Choose any that apply, or none.</span></legend>
+        <legend>How do you use {campaign.data.place}? <span class="hint">Optional. Choose any that apply, or none.</span></legend>
         <div class="checkbox-grid">
           {
             ACTIVITIES.map((a) => (
@@ -109,13 +110,17 @@ const s = campaign.data.submission;
 
       <p class="hint" id={`privacy-${id}`}>
         <strong>Privacy:</strong> don't include your address, phone number or email here. What you paste into
-        ChatGPT or Claude is covered by that company's privacy policy, not this site's. Both may ask you to sign
+        ChatGPT, Claude or Gemini is covered by that company's privacy policy, not this site's. Both may ask you to sign
         in, and free accounts have usage limits.
       </p>
 
       <ol class="steps">
         <li>
           <h4 class="step-title">Copy your prompt</h4>
+          <p class="hint">
+            This turns your answers and the campaign's asks into instructions for a chatbot. You'll choose
+            ChatGPT, Claude or Gemini in the next step.
+          </p>
           <div class="button-row">
             <button type="button" class="button button-large" data-copy-prompt>Copy prompt</button>
           </div>
@@ -133,6 +138,9 @@ const s = campaign.data.submission;
             </a>
             <a class="button button-secondary" data-open="claude" href={siteConfig.chatbots.claudeUrl} target="_blank" rel="noopener noreferrer">
               Open Claude<span class="sr-only"> (new tab)</span>
+            </a>
+            <a class="button button-secondary" data-open="gemini" href={siteConfig.chatbots.geminiUrl} target="_blank" rel="noopener noreferrer">
+              Open Gemini<span class="sr-only"> (new tab)</span>
             </a>
           </div>
         </li>

@@ -32,7 +32,7 @@ export const ACCESS_FACTORS = [
   { id: 'abilities', label: 'Access for people of different abilities' },
 ] as const;
 
-/** "What's your connection to this place?" options (single choice). */
+/** "What's your connection to <place>?" options (single choice). */
 export const CONNECTIONS = [
   { id: 'use_now', label: 'I use it now' },
   { id: 'used_before', label: 'I used it before access got harder' },

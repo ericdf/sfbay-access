@@ -161,7 +161,7 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
             </>
           ) : (
             <>
-              The report doesn't cover every way people use this shoreline (for example,{' '}
+              The report doesn't cover every way people use {d.place} (for example,{' '}
               {ACTIVITIES.filter((a) => a.id !== 'other' && !d.relevant_activities.includes(a.id))
                 .slice(0, 3)
                 .map((a) => a.label.toLowerCase())
@@ -170,7 +170,7 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
             </>
           )
         }
-        If that's you, decision-makers need to hear your first-hand account. You can also
+        If that's you, decision-makers need to hear your first-hand account. You can also{' '}
         <a href={correctionUrl}>send us evidence</a> to add here.
       </p>
     </section>
@@ -193,7 +193,7 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
         }
       </ul>
       <p class="meta">
-        Report page numbers are the numbers printed at the bottom of each page.
+        Report page numbers are the numbers printed at the bottom of each page.{' '}
         <a href={href('report/')}>About the report</a>
       </p>
     </section>

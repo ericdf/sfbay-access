@@ -15,6 +15,7 @@ const campaigns = defineCollection({
       summary: z.string().min(10),
       status: z.enum(STATUSES),
       priority: z.number().int().min(1),
+      place: z.string().min(2),
       issue_area: z.string(),
       agency: z.string(),
       other_decision_makers: z.array(z.string()).default([]),

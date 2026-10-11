@@ -13,49 +13,46 @@ const { href } = Astro.props;
 </a>
 
 <script>
-  // Once the target heading is on screen, line the arrow up with it and turn it to point left.
-  // Hide it after the visitor scrolls past the heading.
+  // Down: the comment section is below. Left: it's on screen (from its heading through the
+  // no-AI outline). Up: the visitor has scrolled past it. Clicking always jumps to the heading.
   const arrow = document.querySelector<HTMLAnchorElement>('[data-take-action]');
   const hash = arrow?.getAttribute('href') ?? '';
-  const target = hash.startsWith('#') ? document.getElementById(hash.slice(1)) : null;
+  const heading = hash.startsWith('#') ? document.getElementById(hash.slice(1)) : null;
+  const section = heading?.closest('section') ?? heading;
 
-  if (arrow && target) {
-    let visible = false;
+  if (arrow && heading && section) {
     let frame = 0;
 
     const place = () => {
       frame = 0;
-      // Already past the heading (using the composer): get out of the way.
-      arrow.classList.toggle('is-past', !visible && target.getBoundingClientRect().bottom < 0);
-      if (!visible) {
-        arrow.classList.remove('is-pointing');
+      const vh = window.innerHeight;
+      const area = section.getBoundingClientRect();
+      const below = area.top >= vh;
+      const above = area.bottom <= 0;
+      arrow.classList.toggle('is-pointing', !below && !above);
+      arrow.classList.toggle('is-up', above);
+      if (below || above) {
         arrow.style.removeProperty('top');
         return;
       }
-      const rect = target.getBoundingClientRect();
       const half = arrow.offsetHeight / 2;
-      const center = rect.top + rect.height / 2;
-      const top = Math.min(Math.max(center, half + 8), window.innerHeight - half - 8);
-      arrow.style.top = `${top}px`;
-      arrow.classList.add('is-pointing');
+      const h = heading.getBoundingClientRect();
+      const headingCenter = h.top + h.height / 2;
+      // Track the heading while it's visible, then hold mid-screen, then follow the section's end up.
+      const y = headingCenter > half + 8 ? headingCenter : Math.min(vh / 2, area.bottom - half);
+      arrow.style.top = `${Math.min(Math.max(y, half + 8), vh - half - 8)}px`;
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(place);
     };
 
-    new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting;
-        schedule();
-      },
-      { threshold: 0 },
-    ).observe(target);
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
+    schedule();
 
     arrow.addEventListener('click', () => {
       // Move keyboard and screen-reader focus to the heading after the jump.
-      window.setTimeout(() => target.focus({ preventScroll: true }), 0);
+      window.setTimeout(() => heading.focus({ preventScroll: true }), 0);
     });
   }
 </script>

@@ -49,6 +49,11 @@ for (const cfg of configs) {
       console.error(`  ✗ ${file}: missing space around inline element near "${text.slice(m.index - 20, m.index + 20)}"`);
       failures++;
     }
+    const visible = text.replace(/<textarea[\s\S]*?<\/textarea>/g, '').replace(/<[^>]+>/g, '');
+    for (const m of visible.matchAll(/\( | \)| ,(?! )/g)) {
+      console.error(`  ✗ ${file}: stray space near "${visible.slice(m.index - 20, m.index + 10)}"`);
+      failures++;
+    }
     if (/<script[^>]*>[^<]*\binnerHTML\b/.test(html)) {
       console.error(`  ✗ ${file}: inline script uses innerHTML`);
       failures++;

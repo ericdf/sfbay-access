@@ -77,7 +77,7 @@ const isCurrent = (p: string) => path === href(p).replace(/\/?$/, '/');
       <div class="wrap-wide">
         <p><strong>{siteConfig.disclaimer}.</strong> SFBA has not reviewed or approved this site, its campaign wording or its comment suggestions.</p>
         <p>
-          Findings come from {siteConfig.report.publisher},
+          Findings come from {siteConfig.report.publisher},{' '}
           {
             siteConfig.report.url ? (
               <a href={siteConfig.report.url}>
@@ -89,8 +89,8 @@ const isCurrent = (p: string) => path === href(p).replace(/\/?$/, '/');
           } ({siteConfig.report.date}). Campaign summaries and suggested wording are this site's own.
         </p>
         <p>
-          No accounts, no tracking, no cookies. Anything you type stays in your browser. ·
-          <a href={siteConfig.correctionsUrl}>Report an inaccuracy</a> ·
+          No accounts, no tracking, no cookies. Anything you type stays in your browser. ·{' '}
+          <a href={siteConfig.correctionsUrl}>Report an inaccuracy</a> ·{' '}
           <a href={siteConfig.repoUrl}>Source code</a>
         </p>
       </div>

@@ -3,17 +3,18 @@
  * form fields, `textContent` and `encodeURIComponent` — never innerHTML — and
  * is never sent anywhere by this site.
  */
-import { buildPrompt, chatgptHandoff, claudeHandoff, type PromptCampaign, type VisitorInput } from './prompt';
+import { buildPrompt, chatgptHandoff, copyOnlyHandoff, type PromptCampaign, type VisitorInput } from './prompt';
 
 export interface ComposerData {
   campaign: PromptCampaign;
   chatgpt: { baseUrl: string; prefill: boolean; maxUrlLength: number };
   claude: { baseUrl: string };
+  gemini: { baseUrl: string };
 }
 
-type Provider = 'chatgpt' | 'claude';
+type Provider = 'chatgpt' | 'claude' | 'gemini';
 
-const PROVIDER_NAMES: Record<Provider, string> = { chatgpt: 'ChatGPT', claude: 'Claude' };
+const PROVIDER_NAMES: Record<Provider, string> = { chatgpt: 'ChatGPT', claude: 'Claude', gemini: 'Gemini' };
 
 export function readInput(root: HTMLElement): VisitorInput {
   const checked = (name: string) =>
@@ -62,6 +63,7 @@ export function initComposer(root: HTMLElement): void {
   const links = {
     chatgpt: root.querySelector<HTMLAnchorElement>('[data-open="chatgpt"]'),
     claude: root.querySelector<HTMLAnchorElement>('[data-open="claude"]'),
+    gemini: root.querySelector<HTMLAnchorElement>('[data-open="gemini"]'),
   };
 
   ui?.removeAttribute('hidden');
@@ -81,7 +83,8 @@ export function initComposer(root: HTMLElement): void {
     const prompt = currentPrompt();
     if (promptField) promptField.value = prompt;
     if (links.chatgpt) links.chatgpt.href = chatgptHandoff(prompt, data.chatgpt).url;
-    if (links.claude) links.claude.href = claudeHandoff(prompt, data.claude).url;
+    if (links.claude) links.claude.href = copyOnlyHandoff(prompt, data.claude).url;
+    if (links.gemini) links.gemini.href = copyOnlyHandoff(prompt, data.gemini).url;
   };
 
   const showManualCopy = () => {
@@ -101,7 +104,7 @@ export function initComposer(root: HTMLElement): void {
       // Let the link open normally (avoids popup blockers). Start the copy inside the same user gesture.
       const prompt = currentPrompt();
       const handoff =
-        provider === 'chatgpt' ? chatgptHandoff(prompt, data.chatgpt) : claudeHandoff(prompt, data.claude);
+        provider === 'chatgpt' ? chatgptHandoff(prompt, data.chatgpt) : copyOnlyHandoff(prompt, data[provider]);
       link.href = handoff.url;
       const name = PROVIDER_NAMES[provider];
       void copyText(prompt, null).then((ok) => {
@@ -124,7 +127,7 @@ export function initComposer(root: HTMLElement): void {
       refresh();
       const ok = await copyText(currentPrompt(), promptField);
       if (ok) {
-        say('Copied. Now step 2: open ChatGPT or Claude and paste it.');
+        say('Copied. Now step 2: open ChatGPT, Claude or Gemini and paste it.');
       } else {
         say("Couldn't copy automatically. The prompt is selected below. Copy it with your device's copy command.");
         showManualCopy();

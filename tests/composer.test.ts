@@ -7,6 +7,7 @@ const data: ComposerData = {
   campaign: sampleCampaign,
   chatgpt: { baseUrl: 'https://chatgpt.com/', prefill: false, maxUrlLength: 6000 },
   claude: { baseUrl: 'https://claude.ai/new' },
+  gemini: { baseUrl: 'https://gemini.google.com/app' },
 };
 
 // Mirrors the data-* hooks in src/components/ActionComposer.astro.
@@ -24,6 +25,7 @@ function mount(): HTMLElement {
         <textarea name="concern"></textarea>
         <a data-open="chatgpt" href="https://chatgpt.com/">ChatGPT</a>
         <a data-open="claude" href="https://claude.ai/new">Claude</a>
+        <a data-open="gemini" href="https://gemini.google.com/app">Gemini</a>
         <button type="button" data-copy-prompt>Copy</button>
         <p role="status" data-status></p>
         <details data-prompt-details><textarea readonly data-prompt-text></textarea></details>
@@ -93,6 +95,20 @@ describe('composer (browser)', () => {
     await flush();
     expect(writeText).toHaveBeenCalledOnce();
     expect(root.querySelector('[data-status]')!.textContent).toMatch(/step 2/);
+  });
+
+  it('Gemini: copies the prompt and opens gemini.google.com without a prefill parameter', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const root = mount();
+    initComposer(root);
+    const link = root.querySelector<HTMLAnchorElement>('[data-open="gemini"]')!;
+    link.addEventListener('click', (e) => e.preventDefault());
+    link.click();
+    await flush();
+    expect(link.getAttribute('href')).toBe('https://gemini.google.com/app');
+    expect(writeText).toHaveBeenCalledWith(expect.stringContaining('Issue: Protect access to Example Beach'));
+    expect(root.querySelector('[data-status]')!.textContent).toMatch(/Gemini/);
   });
 
   it('when clipboard is denied, shows the prompt for manual copying', async () => {

@@ -20,6 +20,7 @@ export function loadCampaignFiles(): { id: string; data: CampaignData }[] {
 
 export const sampleCampaign: PromptCampaign = {
   title: 'Protect access to Example Beach',
+  place: 'Example Beach',
   agency: 'Example Regional Park District',
   route: 'No verified submission route yet.',
   asks: ['Keep a usable beach and a defined route into the water.', 'Fund sand nourishment before spring.'],
