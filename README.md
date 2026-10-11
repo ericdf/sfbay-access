@@ -116,11 +116,11 @@ Only set `chatgptPrefill: true` if prefill works consistently, including signed 
 
 ## Unresolved verification items
 
-Golden Gate Fields is `active`. Berkeley and Crown Beach are `monitoring`, and their dates and contacts come only from the report (sources consulted September 30, 2026).
+All three campaigns are `active`, each with an email route checked against the agency's own page on 2026-10-11. Hearing and vote dates come from the report unless noted.
 
 - **Golden Gate Fields** (`active`, verified 2026-10-11): the comment route (email `clerkoftheboard@ebparks.org` by 3 PM the day before the meeting, subject "Public Comment – [Agenda Item Title]") is taken from EBRPD's current agenda template ([Oct 14, 2026 committee agenda](https://ebparks.primegov.com/Portal/Meeting?meetingTemplateId=6913)). The **October 20** vote date comes from the report and the Berkeley Scanner, and the board agenda wasn't posted as of Oct 11. When it's posted (check `https://ebparks.primegov.com/api/v2/PublicPortal/ListUpcomingMeetings`), set `verified_deadline: 2026-10-19`, put the exact item title in `submission.subject`, and update `last_verified` and `verification_source_url`. After the vote, switch the campaign to `monitoring` for the 2027–29 planning phase.
-- **Berkeley Marina** (`monitoring`): BCDC paid-parking hearing date and comment procedure ("anticipated … in the coming months"). Also the City of Berkeley ferry Final EIR/council schedule and MTC's decision on the $25M request.
-- **Crown Beach** (`monitoring`): how the public can take part in EBRPD–City of Alameda winter storm planning, and any decision dates. Confirm which year "before April" refers to (presumably 2027).
+- **Berkeley Marina** (`active`, verified 2026-10-11): comments go to `publiccomment@bcdc.ca.gov` per [BCDC's comment page](https://www.bcdc.ca.gov/programs/permits/how-to-make-a-public-comment-on-a-pending-permit-application/), which accepts comments before a hearing is set. When BCDC schedules the paid-parking hearing, set `verified_deadline` to the Wednesday before the meeting (comments are due by 10 AM) and add the agenda item to `submission.subject`.
+- **Crown Beach** (`active`, verified 2026-10-11): general comments go to the EBRPD board clerk (`clerkoftheboard@ebparks.org`, subject "Public Comment – Not on Agenda", due 3 PM the day before a board meeting). If Crown Beach storm work goes on an EBRPD or City of Alameda agenda, switch to that item and deadline.
 - **Report pages**: verified against the October 2026 PDF (offset +1). Re-check if SFBA publishes a revised PDF.
 - **Report link**: SFBA-hosted. Permission to link and quote still needs confirming with SFBA.
 - **Agency links**: currently agency homepages, labeled "not a verified comment route." Replace them with specific notices when verifying.
