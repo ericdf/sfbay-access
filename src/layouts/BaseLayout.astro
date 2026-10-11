@@ -2,19 +2,17 @@
 import '../styles/global.css';
 import { siteConfig } from '../lib/site-config';
 import TakeActionArrow from '../components/TakeActionArrow.astro';
-import { getVisibleCampaigns, href } from '../lib/campaigns';
-import { isExpired } from '../lib/campaign-validation';
+import { href } from '../lib/campaigns';
 
 interface Props {
   title?: string;
   description: string;
-  /** Where the floating Take Action arrow jumps. Defaults to the top campaign's comment section. */
+  /** Same-page anchor for the floating Take Action arrow; omitted means no arrow. */
   actionHref?: string;
 }
 
 const { title, description } = Astro.props;
-const topCampaign = (await getVisibleCampaigns()).find((c) => c.data.status !== 'closed' && !isExpired(c.data));
-const actionHref = Astro.props.actionHref ?? (topCampaign ? href(`campaigns/${topCampaign.id}/#voice`) : null);
+const { actionHref } = Astro.props;
 const fullTitle = title ? `${title} · ${siteConfig.name}` : `${siteConfig.name}: ${siteConfig.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const path = Astro.url.pathname.replace(/\/?$/, '/');

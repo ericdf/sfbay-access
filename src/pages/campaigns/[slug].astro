@@ -45,7 +45,7 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
       <p>{STATUS_LABELS[effectiveStatus].long}</p>
       <p>
         <strong>Deadline:</strong>{' '}
-        {deadline ? `${deadline} (verified ${lastVerified})` : 'Not confirmed.'}
+        {deadline ? `${deadline} (verified ${lastVerified})` : d.timing_note ?? 'Write now, before the decision is made.'}
       </p>
       {
         d.reported_milestone && (

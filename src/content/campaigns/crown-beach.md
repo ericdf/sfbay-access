@@ -1,26 +1,32 @@
 ---
 title: Protect access to Crown Beach, Alameda
 summary: Crown Beach is running out of sand, and emergency rock is being stockpiled for winter. Ask that storm protection keep a usable beach and a way into the water.
-status: monitoring  # draft | monitoring | active | closed
-priority: 2
+status: active  # draft | monitoring | active | closed
+priority: 3
 issue_area: Robert W. Crown Memorial State Beach, Alameda
-agency: East Bay Regional Park District (EBRPD)
+agency: East Bay Regional Park District (EBRPD) Board of Directors
 other_decision_makers:
   - City of Alameda (joint winter storm planning; South Shore Adaptation Project; Shoreline Adaptation Plan due 2027)
   - "San Francisco Bay Conservation and Development Commission (BCDC): approved the December 2024 emergency riprap"
 decision_type: Winter storm response and long-term shoreline planning
 verified_deadline: null
-last_verified: null
-verification_source_url: null
+last_verified: 2026-10-11
+verification_source_url: https://ebparks.primegov.com/Portal/Meeting?meetingTemplateId=6913
+timing_note: "Write now, before this winter's storm work. Email by 3 PM Mon., Oct 19 to reach the board before its Oct 20 meeting."
 reported_milestone: >-
   The report says EBRPD and the City of Alameda are planning this winter's
   storm-surge response, and urges permanent ramps and sand "before April." No public
-  decision date or comment procedure has been confirmed by this site.
+  decision date has been announced.
 submission:
-  type: none
+  type: email
   url: null
-  email: null
-  instructions: Pending verification of the EBRPD–Alameda planning process and how the public can participate.
+  email: clerkoftheboard@ebparks.org
+  subject: Public Comment – Not on Agenda
+  instructions: >-
+    Crown Beach isn't on a board agenda, so EBRPD's rules call for the subject line "Public Comment –
+    Not on Agenda". The board meets the first and third Tuesday of each month at 1:00 PM, and written
+    comments are due by 3:00 PM the day before. Written comments go to board members and into the
+    official record but aren't read aloud.
 asks:
   - Include beach and water users in EBRPD and the City of Alameda's winter storm planning for Crown Beach.
   - If more emergency rock is placed, require a defined access route through it to the water.
@@ -41,9 +47,9 @@ share_text: Crown Beach in Alameda is losing its sand, and emergency rock is bei
 source:
   report_pages: [11, 12, 13, 31]
   additional_links:
-    - label: East Bay Regional Park District homepage (not a verified comment route)
-      url: https://www.ebparks.org/
-    - label: City of Alameda homepage (not a verified comment route)
+    - label: EBRPD agenda showing current public-comment procedure (Board committees, Oct 14, 2026)
+      url: https://ebparks.primegov.com/Portal/Meeting?meetingTemplateId=6913
+    - label: City of Alameda
       url: https://www.alamedaca.gov/
 ---
 

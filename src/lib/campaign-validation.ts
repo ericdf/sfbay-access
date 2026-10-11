@@ -135,7 +135,7 @@ export function sortCampaigns<T extends { data: CampaignData }>(items: T[], now 
 export const STATUS_LABELS: Record<CampaignStatus, { short: string; long: string }> = {
   active: {
     short: 'Open for comment',
-    long: 'Open for comment. The decision-maker and submission route have been verified.',
+    long: 'Open for comment. Write now: the decision-maker and how to reach them are below.',
   },
   monitoring: {
     short: 'Monitoring',

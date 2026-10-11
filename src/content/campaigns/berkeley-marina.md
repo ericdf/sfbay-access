@@ -1,8 +1,8 @@
 ---
 title: Protect recreational access at Berkeley Marina
 summary: Berkeley wants to charge for parking at the South Basin lots and turn waterfront parking over to a ferry terminal. Ask regulators to keep this publicly built park accessible.
-status: monitoring  # draft | monitoring | active | closed
-priority: 1
+status: active  # draft | monitoring | active | closed
+priority: 2
 issue_area: Berkeley Marina, South Cove and South Basin
 agency: San Francisco Bay Conservation and Development Commission (BCDC)
 other_decision_makers:
@@ -10,17 +10,22 @@ other_decision_makers:
   - "Metropolitan Transportation Commission (MTC): decision on Berkeley's $25M ferry landside request"
 decision_type: Major permit for paid parking; ferry terminal approvals
 verified_deadline: null
-last_verified: null
-verification_source_url: null
+last_verified: 2026-10-11
+verification_source_url: https://www.bcdc.ca.gov/programs/permits/how-to-make-a-public-comment-on-a-pending-permit-application/
+timing_note: "Write now. BCDC's hearing is expected in the coming months, and early letters go into the record."
 reported_milestone: >-
   The report says BCDC's paid-parking hearing was off the October 15 agenda and
   "anticipated … in the coming months" (quoting BCDC, September 30, 2026). No hearing
-  date has been confirmed by this site.
+  date has been announced.
 submission:
-  type: none  # email | webform | meeting | none
+  type: email  # email | webform | meeting | none
   url: null
-  email: null
-  instructions: Pending verification of BCDC's current hearing date and comment procedure.
+  email: publiccomment@bcdc.ca.gov
+  subject: Berkeley Marina paid parking permit application
+  instructions: >-
+    Send it now; BCDC accepts comments on pending permits before a hearing is scheduled. Once the
+    hearing is on a Commission agenda, comments are due by 10:00 AM the Wednesday before the meeting.
+    BCDC publishes comments as submitted, so leave out your phone number and street address.
 asks:
   - Deny the permit to charge for parking at South Cove and the South Basin. If anything is approved, make it a time-limited trial with a sunset date, independent monitoring and a baseline built from real use data. It must not become permanent administratively.
   - Review the parking-fee permit and the ferry terminal's parking plan together as one project, including their combined effect on recreational parking.
@@ -44,9 +49,9 @@ share_text: Berkeley is asking BCDC for permission to charge for parking at the 
 source:
   report_pages: [6, 7, 8, 9, 31]
   additional_links:
-    - label: BCDC homepage (not a verified comment route)
-      url: https://www.bcdc.ca.gov/
-    - label: City of Berkeley homepage (not a verified comment route)
+    - label: BCDC, how to comment on a pending permit application
+      url: https://www.bcdc.ca.gov/programs/permits/how-to-make-a-public-comment-on-a-pending-permit-application/
+    - label: City of Berkeley
       url: https://berkeleyca.gov/
 ---
 

@@ -12,6 +12,8 @@ export default defineConfig({
   base,
   outDir: process.env.OUT_DIR ?? './dist',
   trailingSlash: 'ignore',
+  // Astro's compressor drops the space at line breaks before inline tags ("as<em>closed</em>").
+  compressHTML: false,
   integrations: [sitemap()],
   build: { format: 'directory' },
 });

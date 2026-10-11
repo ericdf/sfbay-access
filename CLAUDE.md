@@ -16,6 +16,10 @@ Run both test commands before committing.
 - Report page numbers are the printed footer numbers (PDF page = printed + 1). The local copy is `reference/SFBA_State_of_Access_2026_1.pdf`, with extracted text in `reference/report.txt`. Both are git-ignored.
 - `activity_impacts` must come from the report or another named source. If a group's impact isn't documented, leave it out.
 
+## Every campaign asks for action now
+
+Visitors won't come back to check on a campaign, so don't publish copy that asks them to wait ("deadline not confirmed", "check back", "get ready"). A campaign goes live once it has a verified way to reach the decision-maker today, even if no hearing date is set yet. Most agencies accept written comments at any time. If no route exists yet, keep the campaign out of public view (`draft`) instead of showing it as "monitoring".
+
 ## Writing: no AI giveaways
 
 This applies to site copy, campaign files, README, commit messages and replies to the user.

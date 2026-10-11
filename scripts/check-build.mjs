@@ -44,6 +44,11 @@ for (const cfg of configs) {
         failures++;
       }
     }
+    const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
+    for (const m of text.matchAll(/[A-Za-z0-9,.)'’]<(?:a|em|cite|strong)\b|<\/(?:a|em|cite|strong)>[A-Za-z(]/g)) {
+      console.error(`  ✗ ${file}: missing space around inline element near "${text.slice(m.index - 20, m.index + 20)}"`);
+      failures++;
+    }
     if (/<script[^>]*>[^<]*\binnerHTML\b/.test(html)) {
       console.error(`  ✗ ${file}: inline script uses innerHTML`);
       failures++;

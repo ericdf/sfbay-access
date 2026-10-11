@@ -41,6 +41,17 @@ describe('seeded campaign content', () => {
     }
   });
 
+  it.each([
+    ['berkeley-marina', 'publiccomment@bcdc.ca.gov'],
+    ['crown-beach', 'clerkoftheboard@ebparks.org'],
+    ['golden-gate-fields', 'clerkoftheboard@ebparks.org'],
+  ])('%s is open now with a verified email route', (id, email) => {
+    const c = files.find((f) => f.id === id)!.data;
+    expect(c.status).toBe('active');
+    expect(c.submission.email).toBe(email);
+    expect(solicitsComments(c)).toBe(true);
+  });
+
   it('golden-gate-fields is active with the EBRPD clerk route', () => {
     const ggf = files.find((f) => f.id === 'golden-gate-fields')!.data;
     expect(ggf.status).toBe('active');
@@ -58,7 +69,13 @@ describe('seeded campaign content', () => {
 
 describe('validation rules', () => {
   it('rejects an active campaign without a verified submission route', () => {
-    const problems = validateCampaign({ ...berkeley, status: 'active' });
+    const problems = validateCampaign({
+      ...berkeley,
+      status: 'active',
+      submission: { type: 'none' },
+      last_verified: null,
+      verification_source_url: null,
+    });
     expect(problems.join(' ')).toMatch(/verified submission route/);
     expect(problems.join(' ')).toMatch(/last_verified/);
     expect(problems.join(' ')).toMatch(/verification_source_url/);
@@ -77,7 +94,12 @@ describe('validation rules', () => {
   });
 
   it('requires a source for any verified deadline', () => {
-    const problems = validateCampaign({ ...berkeley, verified_deadline: '2026-11-01' });
+    const problems = validateCampaign({
+      ...berkeley,
+      verified_deadline: '2026-11-01',
+      last_verified: null,
+      verification_source_url: null,
+    });
     expect(problems.join(' ')).toMatch(/verified_deadline needs/);
   });
 
