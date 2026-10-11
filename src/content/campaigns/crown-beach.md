@@ -7,7 +7,7 @@ issue_area: Robert W. Crown Memorial State Beach, Alameda
 agency: East Bay Regional Park District (EBRPD)
 other_decision_makers:
   - City of Alameda (joint winter storm planning; South Shore Adaptation Project; Shoreline Adaptation Plan due 2027)
-  - San Francisco Bay Conservation and Development Commission (BCDC) — approved the December 2024 emergency riprap
+  - "San Francisco Bay Conservation and Development Commission (BCDC): approved the December 2024 emergency riprap"
 decision_type: Winter storm response and long-term shoreline planning
 verified_deadline: null
 last_verified: null
@@ -49,10 +49,10 @@ source:
 
 On September 27, 2026, a local boardsports school reported to SFBA that there was "almost no beach left" near the concession. Park staff pushed the remaining sand into temporary ramps. *(Report p. 11)*
 
-**A pattern of triage.** Crown Beach has no natural sand supply. The last major sand placement was in 2013: 82,600 cubic yards, paid for with about $2.5 million in public grants. Since then, maintenance has mostly meant moving the remaining sand around. Requests in 2022 for permanent ramps and new sand went largely unmet. Alameda's 2025 application for 80,000 cubic yards of South Shore sand ($6.3 million) went unfunded. *(pp. 11–12)*
+Crown Beach has no natural sand supply. The last major sand placement was in 2013: 82,600 cubic yards, paid for with about $2.5 million in public grants. Since then, maintenance has mostly meant moving the remaining sand around. Requests in 2022 for permanent ramps and new sand went largely unmet. Alameda's 2025 application for 80,000 cubic yards of South Shore sand ($6.3 million) went unfunded. *(pp. 11–12)*
 
-**This winter.** EBRPD and the City of Alameda are planning their storm-surge response, which again includes stockpiling rock. The report warns that unless access is designed in, more rock will mean less beach. It also notes that a severe storm surge could erase the beach entirely. *(p. 12)*
+EBRPD and the City of Alameda are planning their storm-surge response, which again includes stockpiling rock. The report warns that unless access is designed in, more rock will mean less beach. It also notes that a severe storm surge could erase the beach entirely. *(p. 12)*
 
-**Longer term.** Alameda's Shoreline Adaptation Plan is due in 2027. The report recommends that a usable beginner beach be an explicit design requirement. *(pp. 12–13)*
+Alameda's Shoreline Adaptation Plan is due in 2027. The report recommends that a usable beginner beach be an explicit design requirement. *(pp. 12–13)*
 
 *Summary written by this site from the SFBA report. Positions are SFBA's recommendations, not findings by an agency.*

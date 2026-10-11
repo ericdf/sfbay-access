@@ -23,11 +23,13 @@ const campaigns = defineCollection({
       last_verified: dateish,
       verification_source_url: nullableString,
       reported_milestone: nullableString,
+      timing_note: nullableString,
       submission: z.object({
         type: z.enum(SUBMISSION_TYPES),
         url: nullableString,
         email: z.string().email().nullable().optional(),
         instructions: nullableString,
+        subject: nullableString,
       }),
       asks: z.array(z.string().min(5)),
       relevant_activities: z.array(z.enum(ACTIVITY_IDS)).default([]),

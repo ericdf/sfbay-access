@@ -15,6 +15,7 @@ export interface Submission {
   url?: string | null;
   email?: string | null;
   instructions?: string | null;
+  subject?: string | null;
 }
 
 export interface ActivityImpact {
@@ -36,6 +37,7 @@ export interface CampaignData {
   last_verified?: string | Date | null;
   verification_source_url?: string | null;
   reported_milestone?: string | null;
+  timing_note?: string | null;
   submission: Submission;
   asks: string[];
   relevant_activities?: string[];
@@ -133,18 +135,18 @@ export function sortCampaigns<T extends { data: CampaignData }>(items: T[], now 
 export const STATUS_LABELS: Record<CampaignStatus, { short: string; long: string }> = {
   active: {
     short: 'Open for comment',
-    long: 'Open for comment — the decision-maker and submission route have been verified.',
+    long: 'Open for comment. The decision-maker and submission route have been verified.',
   },
   monitoring: {
     short: 'Monitoring',
-    long: 'Monitoring — no comment opportunity has been confirmed yet. Details below are not yet verified.',
+    long: 'Monitoring. No comment opportunity has been confirmed yet. Details below are not yet verified.',
   },
   draft: {
-    short: 'Draft — not verified',
-    long: 'Draft — details have not been verified. This page is not collecting public comments.',
+    short: 'Draft (not verified)',
+    long: 'Draft. Details have not been verified. This page is not collecting public comments.',
   },
   closed: {
     short: 'Closed',
-    long: 'Closed — this comment opportunity has ended. Please do not submit comments through the old process.',
+    long: 'Closed. This comment opportunity has ended. Please do not submit comments through the old process.',
   },
 };

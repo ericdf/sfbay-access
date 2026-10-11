@@ -16,14 +16,13 @@ type Provider = 'chatgpt' | 'claude';
 const PROVIDER_NAMES: Record<Provider, string> = { chatgpt: 'ChatGPT', claude: 'Claude' };
 
 export function readInput(root: HTMLElement): VisitorInput {
-  const activities = Array.from(root.querySelectorAll<HTMLInputElement>('input[name="activity"]:checked')).map(
-    (el) => el.value,
-  );
+  const checked = (name: string) =>
+    Array.from(root.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`)).map((el) => el.value);
   const value = (name: string) => root.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`)?.value ?? '';
   return {
-    activities,
+    activities: checked('activity'),
     otherActivity: value('other_activity'),
-    experience: value('experience'),
+    factors: checked('factor'),
     concern: value('concern'),
   };
 }

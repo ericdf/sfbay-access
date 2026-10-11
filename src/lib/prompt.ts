@@ -4,7 +4,7 @@
  * Nothing here sends data anywhere.
  */
 
-import { ACTIVITIES } from './activities';
+import { ACCESS_FACTORS, ACTIVITIES } from './activities';
 
 /** Campaign data the composer needs, serialized into each campaign page. */
 export interface PromptCampaign {
@@ -24,11 +24,12 @@ export interface PromptCampaign {
 export interface VisitorInput {
   activities: string[];
   otherActivity: string;
-  experience: string;
+  /** ACCESS_FACTORS ids */
+  factors: string[];
   concern: string;
 }
 
-export const EMPTY_INPUT: VisitorInput = { activities: [], otherActivity: '', experience: '', concern: '' };
+export const EMPTY_INPUT: VisitorInput = { activities: [], otherActivity: '', factors: [], concern: '' };
 
 export const MAX_FIELD_LENGTH = 2000;
 
@@ -54,13 +55,13 @@ export function hasPersonalInput(input: VisitorInput): boolean {
   return (
     input.activities.length > 0 ||
     cleanText(input.otherActivity) !== '' ||
-    cleanText(input.experience) !== '' ||
+    input.factors.length > 0 ||
     cleanText(input.concern) !== ''
   );
 }
 
 export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT): string {
-  const experience = cleanText(input.experience) || 'Not provided';
+  const factors = ACCESS_FACTORS.filter((f) => input.factors.includes(f.id)).map((f) => f.label);
   const concern = cleanText(input.concern) || 'Not provided';
   const asks = c.asks.map((a) => `- ${a}`).join('\n');
   const relevantImpacts = c.impacts.filter((i) => i.activities.some((a) => input.activities.includes(a)));
@@ -94,7 +95,7 @@ export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT
   lines.push(
     '',
     `Activities I selected (if provided): ${describeActivities(input)}`,
-    `My experience (if provided): ${experience}`,
+    `How this decision affects my access (if provided): ${factors.length ? factors.join(', ') : 'Not provided'}`,
     `What matters to me (if provided): ${concern}`,
     '',
     'First, if my personal experience or position is too vague, ask me up to',

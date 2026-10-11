@@ -1,5 +1,5 @@
 ---
-import { ACTIVITIES } from '../lib/activities';
+import { ACCESS_FACTORS, ACTIVITIES } from '../lib/activities';
 import { siteConfig } from '../lib/site-config';
 import { toPromptCampaign, type Campaign } from '../lib/campaigns';
 import { solicitsComments } from '../lib/campaign-validation';
@@ -72,14 +72,19 @@ const id = campaign.id;
         </div>
       </fieldset>
 
-      <div class="field">
-        <label class="field-label" for={`experience-${id}`}>How does this decision affect your access? <span class="hint" style="display:inline">(optional)</span></label>
-        <span class="hint" id={`experience-hint-${id}`}>
-          Concrete details help: getting in and out of the water safely, water quality, how much beach is left,
-          parking, unloading, launch space, or access for people of different abilities. Only include what's true for you.
-        </span>
-        <textarea id={`experience-${id}`} name="experience" maxlength="2000" aria-describedby={`experience-hint-${id}`}></textarea>
-      </div>
+      <fieldset>
+        <legend>How does this decision affect your access? <span class="hint">Optional. Check only what's true for you.</span></legend>
+        <div class="checkbox-grid">
+          {
+            ACCESS_FACTORS.map((f) => (
+              <label>
+                <input type="checkbox" name="factor" value={f.id} />
+                {f.label}
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
 
       <div class="field">
         <label class="field-label" for={`concern-${id}`}>What would you like the decision-makers to understand? <span class="hint" style="display:inline">(optional)</span></label>

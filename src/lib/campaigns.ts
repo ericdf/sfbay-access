@@ -55,7 +55,7 @@ export function routeDescription(c: Campaign): string {
   }
   switch (s.type) {
     case 'email':
-      return `Email to ${s.email}${s.instructions ? ` (${s.instructions})` : ''}`;
+      return `Email to ${s.email}${s.subject ? `, subject line "${s.subject}"` : ''}${s.instructions ? ` (${s.instructions})` : ''}`;
     case 'webform':
       return `The agency's web comment form at ${s.url}${s.instructions ? ` (${s.instructions})` : ''}`;
     case 'meeting':

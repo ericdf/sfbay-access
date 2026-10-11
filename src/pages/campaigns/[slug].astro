@@ -10,6 +10,7 @@ import { getVisibleCampaigns, formatDate, href, type Campaign } from '../../lib/
 import { STATUS_LABELS, isExpired, solicitsComments } from '../../lib/campaign-validation';
 import { ACTIVITIES, activityLabel } from '../../lib/activities';
 import { siteConfig } from '../../lib/site-config';
+import { mailtoLink } from '../../lib/prompt';
 
 export async function getStaticPaths() {
   const campaigns = await getVisibleCampaigns();
@@ -94,11 +95,12 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
           {
             open ? (
               <>
-                {d.submission.type === 'email' && d.submission.email && <a href={`mailto:${d.submission.email}`}>{d.submission.email}</a>}
+                {d.submission.type === 'email' && d.submission.email && <a href={mailtoLink(d.submission.email, d.submission.subject ?? d.title)}>{d.submission.email}</a>}
+                {d.submission.subject && <span> (subject: “{d.submission.subject}”)</span>}
                 {(d.submission.type === 'webform' || d.submission.type === 'meeting') && d.submission.url && (
                   <a href={d.submission.url}>{d.submission.type === 'webform' ? 'Agency comment form' : 'Meeting details'}</a>
                 )}
-                {d.submission.instructions && <span> — {d.submission.instructions}</span>}
+                {d.submission.instructions && <span>. {d.submission.instructions}</span>}
                 {d.verification_source_url && (
                   <span class="meta">
                     {' '}
@@ -168,7 +170,7 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
             </>
           )
         }
-        If that's you, your first-hand account is exactly what decision-makers need to hear. You can also
+        If that's you, decision-makers need to hear your first-hand account. You can also
         <a href={correctionUrl}>send us evidence</a> to add here.
       </p>
     </section>

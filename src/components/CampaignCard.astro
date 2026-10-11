@@ -23,7 +23,7 @@ const deadline = solicitsComments(d) ? formatDate(d.verified_deadline) : null;
   <p><strong>The main ask:</strong> {d.asks[0]}</p>
   <p class="meta">
     <strong>By when:</strong>{' '}
-    {deadline ? <span>Comments due {deadline} (verified)</span> : <span>Deadline not confirmed</span>}
+    {deadline ? <span>Comments due {deadline} (verified)</span> : <span>{d.timing_note ?? 'Deadline not confirmed'}</span>}
   </p>
   <p><a class="button button-secondary" href={href(`campaigns/${campaign.id}/`)}>See how to help<span class="sr-only">: {d.title}</span></a></p>
 </article>

@@ -23,14 +23,29 @@ describe('seeded campaign content', () => {
     expect(files.map((f) => f.id).sort()).toEqual(['berkeley-marina', 'crown-beach', 'golden-gate-fields']);
   });
 
+  it.each(files.map((f) => [f.id, f.data] as const))('%s: list fields are plain strings', (_id, data) => {
+    for (const v of [...data.asks, ...(data.other_decision_makers ?? [])]) expect(typeof v).toBe('string');
+  });
+
   it.each(files.map((f) => [f.id, f.data] as const))('%s passes validation', (_id, data) => {
     expect(validateCampaign(data)).toEqual([]);
   });
 
-  it.each(files.map((f) => [f.id, f.data] as const))('%s stays draft/monitoring until verified', (_id, data) => {
-    expect(['draft', 'monitoring']).toContain(data.status);
-    expect(data.verified_deadline ?? null).toBeNull();
-    expect(solicitsComments(data)).toBe(false);
+  it.each(files.map((f) => [f.id, f.data] as const))('%s: active only with a verified route', (_id, data) => {
+    if (data.status === 'active') {
+      expect(data.submission.type).not.toBe('none');
+      expect(data.last_verified).toBeTruthy();
+      expect(data.verification_source_url).toMatch(/^https:/);
+    } else {
+      expect(solicitsComments(data)).toBe(false);
+    }
+  });
+
+  it('golden-gate-fields is active with the EBRPD clerk route', () => {
+    const ggf = files.find((f) => f.id === 'golden-gate-fields')!.data;
+    expect(ggf.status).toBe('active');
+    expect(ggf.submission.email).toBe('clerkoftheboard@ebparks.org');
+    expect(ggf.verified_deadline ?? null).toBeNull(); // agenda not yet posted
   });
 
   it.each(files.map((f) => [f.id, f.data] as const))('%s cites report pages inside the report (1–33)', (_id, data) => {

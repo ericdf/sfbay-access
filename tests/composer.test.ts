@@ -18,7 +18,8 @@ function mount(): HTMLElement {
         <input type="checkbox" name="activity" value="swimming" />
         <input type="checkbox" name="activity" value="windsurfing" />
         <input type="text" name="other_activity" />
-        <textarea name="experience"></textarea>
+        <input type="checkbox" name="factor" value="parking" />
+        <input type="checkbox" name="factor" value="water_quality" />
         <textarea name="concern"></textarea>
         <a data-open="chatgpt" href="https://chatgpt.com/">ChatGPT</a>
         <a data-open="claude" href="https://claude.ai/new">Claude</a>
@@ -52,7 +53,7 @@ describe('composer (browser)', () => {
   it('never inserts visitor text as HTML', () => {
     const root = mount();
     initComposer(root);
-    const exp = root.querySelector<HTMLTextAreaElement>('[name="experience"]')!;
+    const exp = root.querySelector<HTMLTextAreaElement>('[name="concern"]')!;
     exp.value = '<img src=x onerror="window.__pwned=1"><b>bold</b>';
     exp.dispatchEvent(new Event('input', { bubbles: true }));
     expect(root.querySelectorAll('img, b')).toHaveLength(0);
@@ -63,8 +64,9 @@ describe('composer (browser)', () => {
   it('reads selected activities and free text', () => {
     const root = mount();
     root.querySelector<HTMLInputElement>('input[value="swimming"]')!.checked = true;
+    root.querySelector<HTMLInputElement>('input[value="parking"]')!.checked = true;
     root.querySelector<HTMLInputElement>('[name="other_activity"]')!.value = 'snorkeling';
-    expect(readInput(root)).toMatchObject({ activities: ['swimming'], otherActivity: 'snorkeling' });
+    expect(readInput(root)).toMatchObject({ activities: ['swimming'], factors: ['parking'], otherActivity: 'snorkeling' });
   });
 
   it('Claude: copies the prompt and opens claude.ai without a prefill parameter', async () => {
@@ -100,7 +102,7 @@ describe('composer (browser)', () => {
   it('ChatGPT link stays a plain URL while prefill is disabled', () => {
     const root = mount();
     initComposer(root);
-    const exp = root.querySelector<HTMLTextAreaElement>('[name="experience"]')!;
+    const exp = root.querySelector<HTMLTextAreaElement>('[name="concern"]')!;
     exp.value = 'Something & more';
     exp.dispatchEvent(new Event('input', { bubbles: true }));
     expect(root.querySelector<HTMLAnchorElement>('[data-open="chatgpt"]')!.getAttribute('href')).toBe('https://chatgpt.com/');
