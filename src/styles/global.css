@@ -501,3 +501,97 @@ summary {
     scroll-behavior: smooth;
   }
 }
+
+/* Floating "Take Action" arrow */
+:root {
+  --action-green: #1a7f37;
+  --action-green-strong: #116329;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --action-green: #238636;
+    --action-green-strong: #2ea043;
+  }
+}
+
+.take-action-arrow {
+  position: fixed;
+  z-index: 20;
+  right: 8px;
+  bottom: 16px;
+  transform: translateY(0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  width: 64px;
+  padding: 0.5rem 0.25rem;
+  border-radius: 14px;
+  background: var(--action-green);
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.7rem;
+  line-height: 1.1;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.25);
+  transition:
+    top 0.25s ease,
+    background-color 0.15s ease;
+}
+
+.take-action-arrow:hover,
+.take-action-arrow:focus-visible {
+  background: var(--action-green-strong);
+  color: #fff;
+}
+
+.take-action-icon {
+  width: 36px;
+  height: 36px;
+  transition: transform 0.3s ease;
+}
+
+.take-action-arrow.is-pointing {
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
+.take-action-arrow.is-pointing .take-action-icon {
+  transform: rotate(90deg);
+}
+
+/* Keep the heading clear of the arrow when it lines up beside it. */
+.voice-heading {
+  padding-right: 76px;
+  scroll-margin-top: 30vh;
+}
+
+@media (min-width: 56rem) {
+  .take-action-arrow {
+    right: 24px;
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 112px;
+    padding: 0.9rem 0.5rem;
+    font-size: 1rem;
+    border-radius: 18px;
+  }
+
+  .take-action-icon {
+    width: 72px;
+    height: 72px;
+  }
+
+  .voice-heading {
+    padding-right: 0;
+  }
+}
+
+@media print {
+  .take-action-arrow {
+    display: none;
+  }
+}

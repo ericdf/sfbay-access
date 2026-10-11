@@ -1,0 +1,58 @@
+---
+interface Props {
+  href: string;
+}
+const { href } = Astro.props;
+---
+
+<a class="take-action-arrow" href={href} data-take-action>
+  <svg class="take-action-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+    <path d="M17 4h14v22h11L24 45 6 26h11z" fill="currentColor" />
+  </svg>
+  <span class="take-action-label">Take Action<span class="sr-only">: jump to the comment form</span></span>
+</a>
+
+<script>
+  // Once the target heading is on screen, line the arrow up with it and turn it to point left.
+  const arrow = document.querySelector<HTMLAnchorElement>('[data-take-action]');
+  const hash = arrow?.getAttribute('href') ?? '';
+  const target = hash.startsWith('#') ? document.getElementById(hash.slice(1)) : null;
+
+  if (arrow && target) {
+    let visible = false;
+    let frame = 0;
+
+    const place = () => {
+      frame = 0;
+      if (!visible) {
+        arrow.classList.remove('is-pointing');
+        arrow.style.removeProperty('top');
+        return;
+      }
+      const rect = target.getBoundingClientRect();
+      const half = arrow.offsetHeight / 2;
+      const center = rect.top + rect.height / 2;
+      const top = Math.min(Math.max(center, half + 8), window.innerHeight - half - 8);
+      arrow.style.top = `${top}px`;
+      arrow.classList.add('is-pointing');
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(place);
+    };
+
+    new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        schedule();
+      },
+      { threshold: 0 },
+    ).observe(target);
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+
+    arrow.addEventListener('click', () => {
+      // Move keyboard and screen-reader focus to the heading after the jump.
+      window.setTimeout(() => target.focus({ preventScroll: true }), 0);
+    });
+  }
+</script>

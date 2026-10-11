@@ -1,14 +1,20 @@
 ---
 import '../styles/global.css';
 import { siteConfig } from '../lib/site-config';
-import { href } from '../lib/campaigns';
+import TakeActionArrow from '../components/TakeActionArrow.astro';
+import { getVisibleCampaigns, href } from '../lib/campaigns';
+import { isExpired } from '../lib/campaign-validation';
 
 interface Props {
   title?: string;
   description: string;
+  /** Where the floating Take Action arrow jumps. Defaults to the top campaign's comment section. */
+  actionHref?: string;
 }
 
 const { title, description } = Astro.props;
+const topCampaign = (await getVisibleCampaigns()).find((c) => c.data.status !== 'closed' && !isExpired(c.data));
+const actionHref = Astro.props.actionHref ?? (topCampaign ? href(`campaigns/${topCampaign.id}/#voice`) : null);
 const fullTitle = title ? `${title} · ${siteConfig.name}` : `${siteConfig.name}: ${siteConfig.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const path = Astro.url.pathname.replace(/\/?$/, '/');
@@ -68,6 +74,7 @@ const isCurrent = (p: string) => path === href(p).replace(/\/?$/, '/');
     <main id="main" tabindex="-1">
       <slot />
     </main>
+    {actionHref && <TakeActionArrow href={actionHref} />}
     <footer class="site-footer">
       <div class="wrap-wide">
         <p><strong>{siteConfig.disclaimer}.</strong> SFBA has not reviewed or approved this site, its campaign wording or its comment suggestions.</p>

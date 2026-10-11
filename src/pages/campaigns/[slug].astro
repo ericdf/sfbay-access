@@ -36,7 +36,7 @@ const undocumented = d.relevant_activities.filter((a) => !documented.has(a));
 const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`Correction: ${d.title}`)}`;
 ---
 
-<BaseLayout title={d.title} description={d.summary}>
+<BaseLayout title={d.title} description={d.summary} actionHref={effectiveStatus !== 'closed' ? '#voice' : undefined}>
   <div class="wrap">
     <p class="meta" style="margin-top:1.5rem"><a href={href()}>← All campaigns</a></p>
     <h1>{d.title}</h1>
@@ -44,8 +44,8 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
     <div class={`notice ${effectiveStatus === 'closed' ? 'notice-closed' : effectiveStatus === 'active' ? '' : 'notice-warn'}`}>
       <p>{STATUS_LABELS[effectiveStatus].long}</p>
       <p>
-        <strong>Deadline:</strong>
-        {deadline ? `${deadline} (verified ${lastVerified})` : 'Deadline not confirmed.'}
+        <strong>Deadline:</strong>{' '}
+        {deadline ? `${deadline} (verified ${lastVerified})` : 'Not confirmed.'}
       </p>
       {
         d.reported_milestone && (
@@ -121,7 +121,7 @@ const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`
     {
       effectiveStatus !== 'closed' && (
         <section class="section" aria-labelledby="voice">
-          <h2 id="voice">Make your voice heard</h2>
+          <h2 id="voice" class="voice-heading" tabindex="-1">Make your voice heard</h2>
           {showComposer ? (
             <ActionComposer campaign={campaign} />
           ) : (
