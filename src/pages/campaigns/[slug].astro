@@ -1,0 +1,218 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import SourceLink from '../../components/SourceLink.astro';
+import ActionComposer from '../../components/ActionComposer.astro';
+import ManualRoute from '../../components/ManualRoute.astro';
+import ShareCampaign from '../../components/ShareCampaign.astro';
+import { getVisibleCampaigns, formatDate, href, type Campaign } from '../../lib/campaigns';
+import { STATUS_LABELS, isExpired, solicitsComments } from '../../lib/campaign-validation';
+import { ACTIVITIES, activityLabel } from '../../lib/activities';
+import { siteConfig } from '../../lib/site-config';
+
+export async function getStaticPaths() {
+  const campaigns = await getVisibleCampaigns();
+  return campaigns.map((campaign) => ({ params: { slug: campaign.id }, props: { campaign } }));
+}
+
+interface Props {
+  campaign: Campaign;
+}
+const { campaign } = Astro.props;
+const { Content } = await render(campaign);
+const d = campaign.data;
+const expired = isExpired(d);
+const effectiveStatus = expired ? 'closed' : d.status;
+const open = solicitsComments(d);
+const showComposer = effectiveStatus !== 'closed' && (open || siteConfig.prototypeMode);
+const deadline = open ? formatDate(d.verified_deadline) : null;
+const lastVerified = formatDate(d.last_verified);
+const pageUrl = new URL(href(`campaigns/${campaign.id}/`), Astro.site).href;
+
+const documented = new Set(d.activity_impacts.flatMap((i) => i.activities));
+const undocumented = d.relevant_activities.filter((a) => !documented.has(a));
+const correctionUrl = `${siteConfig.correctionsUrl}?title=${encodeURIComponent(`Correction: ${d.title}`)}`;
+---
+
+<BaseLayout title={d.title} description={d.summary}>
+  <div class="wrap">
+    <p class="meta" style="margin-top:1.5rem"><a href={href()}>← All campaigns</a></p>
+    <h1>{d.title}</h1>
+    <p><StatusBadge status={d.status} deadline={d.verified_deadline} /></p>
+    <div class={`notice ${effectiveStatus === 'closed' ? 'notice-closed' : effectiveStatus === 'active' ? '' : 'notice-warn'}`}>
+      <p>{STATUS_LABELS[effectiveStatus].long}</p>
+      <p>
+        <strong>Deadline:</strong>
+        {deadline ? `${deadline} (verified ${lastVerified})` : 'Deadline not confirmed.'}
+      </p>
+      {
+        d.reported_milestone && (
+          <p>
+            <strong>What the report said (as of September 30, 2026):</strong> {d.reported_milestone}
+          </p>
+        )
+      }
+    </div>
+    <p class="lede">{d.summary}</p>
+
+    <section class="section" aria-labelledby="asks">
+      <h2 id="asks">What we're asking for</h2>
+      <ul class="asks">
+        {d.asks.map((a) => <li>{a}</li>)}
+      </ul>
+      <p class="meta">
+        Asks are this site's wording of recommendations in <SourceLink pages={d.source.report_pages} />. SFBA has
+        not reviewed this wording.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="who-can-act">
+      <h2 id="who-can-act">Who can act</h2>
+      <dl class="facts">
+        <dt>Decision-maker</dt>
+        <dd>
+          {d.agency}
+          {!open && <span class="meta"> (identified from the report; not yet independently verified)</span>}
+        </dd>
+        {
+          d.other_decision_makers.length > 0 && (
+            <>
+              <dt>Also involved</dt>
+              <dd>
+                <ul style="margin:0;padding-left:1.1rem">
+                  {d.other_decision_makers.map((m) => <li>{m}</li>)}
+                </ul>
+              </dd>
+            </>
+          )
+        }
+        <dt>Decision</dt>
+        <dd>{d.decision_type}</dd>
+        <dt>How to submit</dt>
+        <dd>
+          {
+            open ? (
+              <>
+                {d.submission.type === 'email' && d.submission.email && <a href={`mailto:${d.submission.email}`}>{d.submission.email}</a>}
+                {(d.submission.type === 'webform' || d.submission.type === 'meeting') && d.submission.url && (
+                  <a href={d.submission.url}>{d.submission.type === 'webform' ? 'Agency comment form' : 'Meeting details'}</a>
+                )}
+                {d.submission.instructions && <span> — {d.submission.instructions}</span>}
+                {d.verification_source_url && (
+                  <span class="meta">
+                    {' '}
+                    (<a href={d.verification_source_url}>primary source</a>)
+                  </span>
+                )}
+              </>
+            ) : effectiveStatus === 'closed' ? (
+              'This opportunity has closed.'
+            ) : (
+              <>Not yet verified. {d.submission.instructions}</>
+            )
+          }
+        </dd>
+      </dl>
+    </section>
+
+    {
+      effectiveStatus !== 'closed' && (
+        <section class="section" aria-labelledby="voice">
+          <h2 id="voice">Make your voice heard</h2>
+          {showComposer ? (
+            <ActionComposer campaign={campaign} />
+          ) : (
+            <p>
+              There's no confirmed comment opportunity yet. The talking points below are here so you can
+              prepare.
+            </p>
+          )}
+          <h3 id="write-without-ai" tabindex="-1">Write without AI</h3>
+          <ManualRoute campaign={campaign} />
+        </section>
+      )
+    }
+
+    <section class="section" aria-labelledby="affected">
+      <h2 id="affected">Who is affected?</h2>
+      {
+        d.activity_impacts.length > 0 && (
+          <ul>
+            {d.activity_impacts.map((i) => (
+              <li>
+                <strong>{i.activities.map(activityLabel).join(', ')}:</strong> {i.text}{' '}
+                <span class="meta">
+                  (<SourceLink pages={i.report_pages} />)
+                </span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <p>
+        {
+          undocumented.length > 0 ? (
+            <>
+              The report doesn't document specific effects on{' '}
+              {undocumented.map(activityLabel).join(', ').toLowerCase()} here.{' '}
+            </>
+          ) : (
+            <>
+              The report doesn't cover every way people use this shoreline (for example,{' '}
+              {ACTIVITIES.filter((a) => a.id !== 'other' && !d.relevant_activities.includes(a.id))
+                .slice(0, 3)
+                .map((a) => a.label.toLowerCase())
+                .join(', ')}
+              ).{' '}
+            </>
+          )
+        }
+        If that's you, your first-hand account is exactly what decision-makers need to hear. You can also
+        <a href={correctionUrl}>send us evidence</a> to add here.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="why">
+      <h2 id="why">Why it matters</h2>
+      <Content />
+    </section>
+
+    <section class="section" aria-labelledby="evidence">
+      <h2 id="evidence">Read the evidence</h2>
+      <ul>
+        <li><SourceLink pages={d.source.report_pages} /></li>
+        {
+          d.source.additional_links.map((l) => (
+            <li>
+              <a href={l.url}>{l.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="meta">
+        Report page numbers are the numbers printed at the bottom of each page.
+        <a href={href('report/')}>About the report</a>
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="share">
+      <h2 id="share">Share this campaign</h2>
+      <ShareCampaign title={d.title} text={d.share_text ?? d.summary} url={pageUrl} id={campaign.id} />
+    </section>
+
+    <section class="section" aria-labelledby="checked">
+      <h2 id="checked">Last checked</h2>
+      <p>
+        {lastVerified ? `Action details last verified ${lastVerified}.` : 'Action details have not yet been verified against primary sources.'}
+        See something wrong or out of date? <a href={correctionUrl}>Report a correction</a>.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  import { initCopyButtons, initShare } from '../../lib/composer-client';
+  initCopyButtons();
+  initShare();
+</script>

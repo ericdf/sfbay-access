@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../lib/site-config';
+import { href, reportPageUrl } from '../lib/campaigns';
+
+const r = siteConfig.report;
+const sections = [
+  { label: 'Introduction', page: 1 },
+  { label: 'Site status overview', page: 4 },
+  { label: 'Berkeley Marina', page: 6 },
+  { label: 'Golden Gate Fields and Racetrack', page: 10 },
+  { label: 'Crown Beach, Alameda', page: 11 },
+  { label: 'Toll Plaza / Radio Beach', page: 13 },
+  { label: 'Treasure Island', page: 17 },
+  { label: 'Legal framework for access', page: 30 },
+  { label: '2026–27 priorities', page: 31 },
+  { label: 'Sources', page: 31 },
+];
+---
+
+<BaseLayout title="The report" description="About the SFBA report this site draws on, and how this site cites it.">
+  <div class="wrap">
+    <h1>The report behind this site</h1>
+    <p class="lede">
+      {r.publisher}, <cite>{r.title}</cite> ({r.date}). An annual audit of whether the public can still reach the
+      water at launch sites and beaches around the Bay.
+    </p>
+    {
+      r.url ? (
+        <p class="button-row">
+          <a class="button" href={r.url}>Read the full report (PDF, about 3 MB)</a>
+        </p>
+      ) : (
+        <p class="notice notice-warn">
+          <strong>Report link pending.</strong> A stable public link to the report hasn't been confirmed yet.
+        </p>
+      )
+    }
+
+    <h2>How this site uses it</h2>
+    <ul>
+      <li>The report is the starting evidence base. Factual findings and recommendations on campaign pages are attributed to it, with page numbers.</li>
+      <li>Campaign summaries, the wording of the asks and the suggested comment prompts are written by this site. SFBA has not reviewed them.</li>
+      <li>
+        Dates in the report reflect what was known when it was written (sources consulted September 30, 2026).
+        This site doesn't treat them as current deadlines until they've been checked against the agency's own notice.
+      </li>
+      <li>Procedural details such as hearing dates and comment addresses come from official government sources, listed on each campaign page.</li>
+    </ul>
+
+    <h2>Page numbers</h2>
+    <p>
+      This site cites the page numbers printed at the bottom of each report page. The PDF's cover is unnumbered,
+      so printed page <em>N</em> is PDF page <em>N + {r.pdfPageOffset}</em>. Page links open the PDF at the right
+      page in most browsers.
+    </p>
+
+    <h2>Report sections</h2>
+    <ul>
+      {
+        sections.map((s) => (
+          <li>
+            {r.url ? <a href={reportPageUrl(s.page)}>{s.label}</a> : s.label} <span class="meta">(p. {s.page})</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p><a href={href()}>← Back to campaigns</a></p>
+  </div>
+</BaseLayout>

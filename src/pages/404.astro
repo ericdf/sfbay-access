@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../lib/campaigns';
+---
+
+<BaseLayout title="Page not found" description="This page doesn't exist.">
+  <div class="wrap">
+    <h1>Page not found</h1>
+    <p>The page you were looking for doesn't exist, or a campaign has moved.</p>
+    <p><a href={href()}>Go to current campaigns</a></p>
+  </div>
+</BaseLayout>

@@ -1,0 +1,27 @@
+{
+  "name": "sfbay-access",
+  "private": true,
+  "type": "module",
+  "description": "Bay Access Action Center — independent prototype based on SFBA's 2026 State of Access report",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:build": "node scripts/check-build.mjs",
+    "check": "npm test && npm run test:build"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.8"
+  },
+  "devDependencies": {
+    "happy-dom": "^20.14.6",
+    "vitest": "^5.0.3",
+    "yaml": "^2.9.1"
+  }
+}

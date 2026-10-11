@@ -1,0 +1,132 @@
+---
+import { ACTIVITIES } from '../lib/activities';
+import { siteConfig } from '../lib/site-config';
+import { toPromptCampaign, type Campaign } from '../lib/campaigns';
+import { solicitsComments } from '../lib/campaign-validation';
+import type { ComposerData } from '../lib/composer-client';
+
+interface Props {
+  campaign: Campaign;
+}
+const { campaign } = Astro.props;
+const open = solicitsComments(campaign.data);
+const data: ComposerData = {
+  campaign: toPromptCampaign(campaign),
+  chatgpt: {
+    baseUrl: siteConfig.chatbots.chatgptUrl,
+    prefill: siteConfig.chatbots.chatgptPrefill,
+    maxUrlLength: siteConfig.chatbots.maxPrefillUrlLength,
+  },
+  claude: { baseUrl: siteConfig.chatbots.claudeUrl },
+};
+// Safe to embed in a <script type="application/json">: escape "<" so nothing can close the tag.
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+const id = campaign.id;
+---
+
+<div class="composer" data-composer>
+  <script type="application/json" data-composer-data set:html={json} />
+
+  {
+    !open && (
+      <div class="notice notice-warn">
+        <p>
+          <strong>Practice mode.</strong> This campaign's decision-maker and submission route haven't been
+          verified yet. You can try the drafting tool, but please don't send anything until this page says
+          the campaign is open for comment.
+        </p>
+      </div>
+    )
+  }
+
+  <noscript>
+    <p class="notice">
+      The AI drafting helper needs JavaScript. You can still use the talking points and outline under
+      <a href="#write-without-ai">Write without AI</a>.
+    </p>
+  </noscript>
+
+  <div data-composer-ui hidden>
+    <p>
+      Answer as much or as little as you like. We build a prompt from this campaign's asks and your answers,
+      and you take it to ChatGPT or Claude to draft a comment in your own words. Nothing you type is sent to
+      this site or saved.
+    </p>
+
+    <form onsubmit="return false" aria-describedby={`privacy-${id}`}>
+      <fieldset>
+        <legend>How do you use this part of the Bay? <span class="hint">Optional. Choose any that apply, or none.</span></legend>
+        <div class="checkbox-grid">
+          {
+            ACTIVITIES.map((a) => (
+              <label>
+                <input type="checkbox" name="activity" value={a.id} />
+                {a.label}
+              </label>
+            ))
+          }
+        </div>
+        <div class="field" style="margin-top:0.75rem;margin-bottom:0">
+          <label class="field-label" for={`other-${id}`}>Other activity <span class="hint" style="display:inline">(optional)</span></label>
+          <input type="text" id={`other-${id}`} name="other_activity" maxlength="200" autocomplete="off" />
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label class="field-label" for={`experience-${id}`}>How does this decision affect your access? <span class="hint" style="display:inline">(optional)</span></label>
+        <span class="hint" id={`experience-hint-${id}`}>
+          Concrete details help: getting in and out of the water safely, water quality, how much beach is left,
+          parking, unloading, launch space, or access for people of different abilities. Only include what's true for you.
+        </span>
+        <textarea id={`experience-${id}`} name="experience" maxlength="2000" aria-describedby={`experience-hint-${id}`}></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for={`concern-${id}`}>What would you like the decision-makers to understand? <span class="hint" style="display:inline">(optional)</span></label>
+        <textarea id={`concern-${id}`} name="concern" maxlength="2000"></textarea>
+      </div>
+
+      <p class="hint" id={`privacy-${id}`}>
+        <strong>Privacy:</strong> don't include your address, phone number or email here. What you paste into
+        ChatGPT or Claude is handled under that company's privacy policy, not this site's. Both services may
+        ask you to sign in, and free accounts have usage limits.
+      </p>
+
+      <div class="button-row">
+        <a class="button" data-open="chatgpt" href={siteConfig.chatbots.chatgptUrl} target="_blank" rel="noopener noreferrer">
+          Continue in ChatGPT<span class="sr-only"> (copies your prompt and opens in a new tab)</span>
+        </a>
+        <a class="button" data-open="claude" href={siteConfig.chatbots.claudeUrl} target="_blank" rel="noopener noreferrer">
+          Continue in Claude<span class="sr-only"> (copies your prompt and opens in a new tab)</span>
+        </a>
+        <button type="button" class="button button-secondary" data-copy-prompt>Copy prompt</button>
+        <a class="button button-secondary" href="#write-without-ai">Write without AI</a>
+      </div>
+
+      <p class="status-message" role="status" aria-live="polite" data-status></p>
+
+      <div class="notice" data-paste-help hidden>
+        <p>
+          <strong>Next:</strong> in the <span data-paste-help-provider>chatbot</span> tab, click the message box and
+          paste (<kbd>Ctrl</kbd>+<kbd>V</kbd> or <kbd>⌘</kbd>+<kbd>V</kbd>; on a phone, press and hold, then
+          Paste). Review the draft, change anything that isn't right, and send it yourself through the route
+          under "Who can act." The chatbot can't send it for you.
+        </p>
+      </div>
+
+      <details data-prompt-details>
+        <summary>See or copy the full prompt</summary>
+        <label class="field-label" for={`prompt-${id}`}>Prompt (updates as you type)</label>
+        <textarea id={`prompt-${id}`} class="prompt-text" readonly data-prompt-text></textarea>
+        <div class="button-row">
+          <button type="button" class="button button-secondary" data-copy-prompt>Copy prompt</button>
+        </div>
+      </details>
+    </form>
+  </div>
+</div>
+
+<script>
+  import { initComposer } from '../lib/composer-client';
+  document.querySelectorAll<HTMLElement>('[data-composer]').forEach((el) => initComposer(el));
+</script>

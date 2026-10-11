@@ -1,0 +1,29 @@
+---
+import StatusBadge from './StatusBadge.astro';
+import { href, formatDate, type Campaign } from '../lib/campaigns';
+import { solicitsComments } from '../lib/campaign-validation';
+
+interface Props {
+  campaign: Campaign;
+  headingLevel?: 'h2' | 'h3';
+}
+const { campaign, headingLevel = 'h3' } = Astro.props;
+const d = campaign.data;
+const Heading = headingLevel;
+const deadline = solicitsComments(d) ? formatDate(d.verified_deadline) : null;
+---
+
+<article class="card">
+  <p class="meta">
+    <StatusBadge status={d.status} deadline={d.verified_deadline} />
+    <span> · {d.issue_area}</span>
+  </p>
+  <Heading><a href={href(`campaigns/${campaign.id}/`)}>{d.title}</a></Heading>
+  <p><strong>What's at risk:</strong> {d.summary}</p>
+  <p><strong>The main ask:</strong> {d.asks[0]}</p>
+  <p class="meta">
+    <strong>By when:</strong>{' '}
+    {deadline ? <span>Comments due {deadline} (verified)</span> : <span>Deadline not confirmed</span>}
+  </p>
+  <p><a class="button button-secondary" href={href(`campaigns/${campaign.id}/`)}>See how to help<span class="sr-only">: {d.title}</span></a></p>
+</article>

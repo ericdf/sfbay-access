@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+import { siteConfig } from '../lib/site-config';
+import { href } from '../lib/campaigns';
+
+interface Props {
+  title?: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const fullTitle = title ? `${title} · ${siteConfig.name}` : `${siteConfig.name} — ${siteConfig.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+
+const nav = [
+  { label: 'Take action', path: '' },
+  { label: 'The report', path: 'report/' },
+  { label: 'About', path: 'about/' },
+];
+const isCurrent = (p: string) => path === href(p).replace(/\/?$/, '/');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {siteConfig.prototypeMode && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/svg+xml" href={href('favicon.svg')} />
+    <link rel="sitemap" href={href('sitemap-index.xml')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={title ?? siteConfig.tagline} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#0b4f6c" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="prototype-bar" role="note">
+      <div class="wrap-wide">
+        <p><strong>{siteConfig.disclaimer}.</strong> <a href={href('about/')}>About this project</a></p>
+      </div>
+    </div>
+    <header class="site-header">
+      <div class="wrap-wide">
+        <a class="brand" href={href()}>{siteConfig.name}</a>
+        <nav class="site-nav" aria-label="Main">
+          <ul>
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={href(item.path)} aria-current={isCurrent(item.path) ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap-wide">
+        <p><strong>{siteConfig.disclaimer}.</strong> SFBA has not reviewed or approved this site, its campaign wording or its comment suggestions.</p>
+        <p>
+          Findings come from {siteConfig.report.publisher},
+          {
+            siteConfig.report.url ? (
+              <a href={siteConfig.report.url}>
+                <cite>{siteConfig.report.title}</cite>
+              </a>
+            ) : (
+              <cite>{siteConfig.report.title}</cite>
+            )
+          } ({siteConfig.report.date}). Campaign summaries and suggested wording are this site's own.
+        </p>
+        <p>
+          No accounts, no tracking, no cookies. Anything you type stays in your browser. ·
+          <a href={siteConfig.correctionsUrl}>Report an inaccuracy</a> ·
+          <a href={siteConfig.repoUrl}>Source code</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

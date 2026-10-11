@@ -1,0 +1,33 @@
+---
+import { siteConfig } from '../lib/site-config';
+import { formatPages, reportPageUrl } from '../lib/campaigns';
+
+interface Props {
+  pages: number[];
+}
+const { pages } = Astro.props;
+const sorted = [...new Set(pages)].sort((a, b) => a - b);
+---
+
+<span class="source-link">
+  SFBA, <cite>{siteConfig.report.title}</cite>,
+  {
+    siteConfig.report.url ? (
+      <>
+        {sorted.length > 1 ? 'pp. ' : 'p. '}
+        {sorted.map((p, i) => (
+          <>
+            {i > 0 && ', '}
+            <a href={reportPageUrl(p)} aria-label={`Report page ${p} (PDF)`}>
+              {p}
+            </a>
+          </>
+        ))}
+      </>
+    ) : (
+      <>
+        {formatPages(sorted)} <strong>[report link pending]</strong>
+      </>
+    )
+  }
+</span>

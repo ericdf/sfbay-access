@@ -1,0 +1,21 @@
+---
+interface Props {
+  title: string;
+  text: string;
+  url: string;
+  id: string;
+}
+const { title, text, url, id } = Astro.props;
+const fieldId = `share-${id}`;
+---
+
+<div class="share">
+  <p>{text}</p>
+  <label class="field-label" for={fieldId}>Link to this campaign</label>
+  <input type="text" id={fieldId} value={url} readonly />
+  <div class="button-row">
+    <button type="button" class="button button-secondary" data-copy-target={fieldId} data-copy-status={`${fieldId}-status`} hidden>Copy link</button>
+    <button type="button" class="button button-secondary" data-share data-share-title={title} data-share-text={text} data-share-url={url} hidden>Share…</button>
+    <span id={`${fieldId}-status`} role="status" aria-live="polite"></span>
+  </div>
+</div>

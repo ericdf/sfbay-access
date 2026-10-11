@@ -1,0 +1,89 @@
+---
+import { solicitsComments } from '../lib/campaign-validation';
+import { activityLabel } from '../lib/activities';
+import { mailtoLink } from '../lib/prompt';
+import type { Campaign } from '../lib/campaigns';
+
+interface Props {
+  campaign: Campaign;
+}
+const { campaign } = Astro.props;
+const d = campaign.data;
+const open = solicitsComments(d);
+const s = d.submission;
+const outline = [
+  `Subject: ${d.title}`,
+  '',
+  `To: ${d.agency}`,
+  '',
+  '1. Who I am (only what you want to share, e.g. how often you use this part of the Bay and for what):',
+  '',
+  '2. My request (pick one or two):',
+  ...d.asks.map((a) => `   - ${a}`),
+  '',
+  '3. Why it matters to me (a specific experience of your own):',
+  '',
+  '4. Thank you, and my name (and city, if you choose):',
+].join('\n');
+const outlineId = `outline-${campaign.id}`;
+---
+
+<div class="manual-route">
+  <h3>Talking points</h3>
+  <p class="hint">Adapted from the SFBA report's recommendations. Choose the ones that match your own experience.</p>
+  <ul>
+    {d.asks.map((a) => <li>{a}</li>)}
+  </ul>
+
+  {
+    d.activity_impacts.length > 0 && (
+      <>
+        <h3>Report findings by activity</h3>
+        <ul>
+          {d.activity_impacts.map((i) => (
+            <li>
+              <strong>{i.activities.map(activityLabel).join(', ')}:</strong> {i.text}{' '}
+              <span class="meta">(report {i.report_pages.length > 1 ? 'pp.' : 'p.'} {i.report_pages.join(', ')})</span>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  <h3>Where to send it</h3>
+  {
+    open ? (
+      <>
+        {s.type === 'email' && s.email && (
+          <p>
+            Email <a href={mailtoLink(s.email, d.title)}>{s.email}</a>.{s.instructions && ` ${s.instructions}`}
+          </p>
+        )}
+        {s.type === 'webform' && s.url && (
+          <p>
+            Use the agency's <a href={s.url}>comment form</a>.{s.instructions && ` ${s.instructions}`}
+          </p>
+        )}
+        {s.type === 'meeting' && s.url && (
+          <p>
+            Comment at the <a href={s.url}>public meeting</a>.{s.instructions && ` ${s.instructions}`}
+          </p>
+        )}
+      </>
+    ) : (
+      <p>
+        <strong>No verified submission route yet.</strong> {s.instructions} You can draft your comment now and
+        send it once this page lists a confirmed route.
+      </p>
+    )
+  }
+
+  <h3>A simple outline</h3>
+  <label class="field-label" for={outlineId}>Edit this outline, then copy it into your email or the agency's form</label>
+  <textarea id={outlineId} rows="14">{outline}</textarea>
+  <div class="button-row">
+    <button type="button" class="button button-secondary" data-copy-target={outlineId} data-copy-status={`${outlineId}-status`} hidden>Copy outline</button>
+    <span id={`${outlineId}-status`} role="status" aria-live="polite"></span>
+  </div>
+</div>

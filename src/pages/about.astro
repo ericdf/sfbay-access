@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../lib/site-config';
+import { href } from '../lib/campaigns';
+import { STATUS_LABELS, STATUSES } from '../lib/campaign-validation';
+---
+
+<BaseLayout title="About" description="Who runs this prototype, how it's maintained, and how to report inaccuracies.">
+  <div class="wrap">
+    <h1>About this project</h1>
+    <p class="notice notice-warn">
+      <strong>{siteConfig.disclaimer}.</strong> SFBA has not approved this site, its campaign wording or its
+      public-comment suggestions, and doesn't operate it. No swimming, paddling or community group is a partner
+      unless it's named here with its permission (none are yet).
+    </p>
+
+    <h2>What this is</h2>
+    <p>
+      An independently built demonstration of a coalition action center for San Francisco Bay shoreline access,
+      offered to the San Francisco Boardsailing Association for review. It turns findings from SFBA's 2026
+      report into specific actions anyone who uses the Bay can take: swimmers, paddlers, rowers, sailors, board
+      sports, anglers and beach visitors.
+    </p>
+
+    <h2>What campaign statuses mean</h2>
+    <dl class="facts">
+      {
+        STATUSES.map((s) => (
+          <>
+            <dt>{STATUS_LABELS[s].short}</dt>
+            <dd>{STATUS_LABELS[s].long}</dd>
+          </>
+        ))
+      }
+    </dl>
+    <p>
+      A campaign is only marked open for comment after its decision-maker, submission route and any deadline
+      have been checked against an official source, and the date of that check is shown on the page.
+    </p>
+
+    <h2>Using AI to draft a comment</h2>
+    <p>
+      The comment helper doesn't call any AI service itself. It builds a prompt from the campaign and your
+      optional answers. You choose whether to paste it into ChatGPT or Claude, using your own free or paid
+      account. The prompt tells the chatbot not to invent experiences, credentials or facts, and to ask you
+      questions first if you haven't shared enough. You review and send the comment yourself. You can always
+      write without AI using the talking points on each page.
+    </p>
+
+    <h2>Privacy</h2>
+    <ul>
+      <li>No accounts, analytics, tracking pixels or cookies.</li>
+      <li>What you type into the helper stays in your browser tab. It isn't saved or sent to this site or to SFBA.</li>
+      <li>If you choose to paste it into ChatGPT or Claude, that company's privacy policy applies.</li>
+    </ul>
+
+    <h2>Corrections and maintenance</h2>
+    <p>
+      Campaigns are plain text files in the <a href={siteConfig.repoUrl}>project repository</a>, so anyone can
+      see what changed and when. To report an inaccuracy, an outdated date or contact, or evidence about how a
+      decision affects your activity, <a href={siteConfig.correctionsUrl}>open an issue</a>.
+    </p>
+
+    <h2>If SFBA adopts it</h2>
+    <p>
+      The project is built to be handed over: the repository can be transferred to an SFBA-controlled account,
+      linked from sfba.org or served from a custom subdomain. Editorial ownership, the disclaimer and these
+      pages would then be updated to reflect SFBA's decisions.
+    </p>
+    <p><a href={href()}>← Back to campaigns</a></p>
+  </div>
+</BaseLayout>

@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CampaignCard from '../components/CampaignCard.astro';
+import { getVisibleCampaigns, href, reportPageUrl } from '../lib/campaigns';
+import { solicitsComments, isExpired } from '../lib/campaign-validation';
+import { siteConfig } from '../lib/site-config';
+
+const campaigns = await getVisibleCampaigns();
+const openNow = campaigns.filter((c) => solicitsComments(c.data));
+const watching = campaigns.filter((c) => !solicitsComments(c.data) && c.data.status !== 'closed' && !isExpired(c.data));
+const priorities = [
+  'Berkeley Marina: discourage BCDC from permitting paid parking, and judge the ferry project on real use data, a costed in-marina alternative and a full fiscal accounting.',
+  'Crown Beach: design access into this winter’s storm response, and secure permanent ramps and sand before April.',
+  'Measure use: build a replicable way to measure recreational demand from anonymized mobility data.',
+  'Write recreation into shoreline adaptation plans: usable beach width, a usable tidal window, launch and landing space, and parking for recreation.',
+  'Beaches over armor: favor sand nourishment and living shorelines, and require designed access through any armoring.',
+  'New parkland: plan new shoreline parks around regional, not site-by-site, needs.',
+  'Fund the work and keep building a coalition of swimmers, paddlers, anglers and families who share these beaches.',
+];
+---
+
+<BaseLayout description="Specific, time-sensitive actions to protect safe, equitable access to San Francisco Bay for swimmers, paddlers, sailors, board-sport riders, anglers and beachgoers.">
+  <div class="wrap">
+    <h1>{siteConfig.tagline}</h1>
+    <p class="lede">
+      Decisions about parking, beaches, sea walls, water access and new parks are being made around the Bay
+      right now. They affect swimmers, paddlers, rowers, sailors, windsurfers, kiters, wingfoilers, anglers and
+      beach visitors in different ways. This site turns the findings of a 2026 shoreline-access report into
+      specific things you can do, and helps you say them in your own words.
+    </p>
+    <p class="notice notice-warn">
+      <strong>{siteConfig.disclaimer}.</strong> It doesn't speak for SFBA or for any swimming, paddling or
+      community group.
+    </p>
+
+    <section class="section" aria-labelledby="act-now">
+      <h2 id="act-now">Take action now</h2>
+      {
+        openNow.length > 0 ? (
+          <ul class="card-list">
+            {openNow.map((c) => (
+              <li>
+                <CampaignCard campaign={c} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>
+            <strong>There are no verified open comment opportunities right now.</strong> We only list a deadline
+            once it's been checked against the agency's own notice. The issues below are being watched. Read up
+            and get your comments ready.
+          </p>
+        )
+      }
+    </section>
+
+    {
+      watching.length > 0 && (
+        <section class="section" aria-labelledby="watching">
+          <h2 id="watching">Issues we're watching</h2>
+          <p class="meta">Ordered by priority. These aren't open for comment yet, and dates haven't been verified.</p>
+          <ul class="card-list">
+            {watching.map((c) => (
+              <li>
+                <CampaignCard campaign={c} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="section" aria-labelledby="found">
+      <h2 id="found">What SFBA's report found</h2>
+      <p>
+        The San Francisco Boardsailing Association's annual audit rates shoreline access sites as
+        <em>closed</em>, <em>compromised</em> or <em>threatened</em>. Its 2026 edition identifies two forces
+        driving the biggest changes:
+      </p>
+      <ul>
+        <li><strong>Public land put to private use:</strong> charging for access to shoreline parks built for public recreation.</li>
+        <li><strong>Erosion, and how we respond to it:</strong> rock and walls protect what's behind a beach, but the beach itself is lost.</li>
+      </ul>
+      <h3>The report's 2026–27 priorities</h3>
+      <ol>
+        {priorities.map((p) => <li>{p}</li>)}
+      </ol>
+      <p class="meta">
+        Summarized from the report's
+        {
+          siteConfig.report.url ? (
+            <a href={reportPageUrl(31)}>2026–27 priorities (p. 31)</a>
+          ) : (
+            '2026–27 priorities (p. 31)'
+          )
+        } and introduction (pp. 1–2).
+      </p>
+      <p class="button-row">
+        {siteConfig.report.url && <a class="button" href={siteConfig.report.url}>Read the full report (PDF)</a>}
+        <a class="button button-secondary" href={href('report/')}>About the report</a>
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="groups">
+      <h2 id="groups">For community groups</h2>
+      <p>
+        Swim clubs, paddling and rowing clubs, fishing groups and neighborhood organizations are welcome to
+        share any campaign here. Each page has a plain link and short description you can pass along. If you
+        have first-hand evidence, corrections or a different perspective, please <a href={siteConfig.correctionsUrl}>tell us</a>.
+        We don't list any group as a partner or supporter without its permission.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

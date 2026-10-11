@@ -1,0 +1,12 @@
+---
+import { STATUS_LABELS, isExpired, type CampaignStatus } from '../lib/campaign-validation';
+
+interface Props {
+  status: CampaignStatus;
+  deadline?: string | Date | null;
+}
+const { status, deadline } = Astro.props;
+const effective: CampaignStatus = isExpired({ status, verified_deadline: deadline }) ? 'closed' : status;
+---
+
+<span class={`status status-${effective}`}><span class="sr-only">Status: </span>{STATUS_LABELS[effective].short}</span>

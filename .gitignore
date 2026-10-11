@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+.env
+.env.*
+
+# Local reference copy of the SFBA report (cached for verification; not republished)
+reference/
+.build-check/
