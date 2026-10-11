@@ -14,6 +14,7 @@ const { href } = Astro.props;
 
 <script>
   // Once the target heading is on screen, line the arrow up with it and turn it to point left.
+  // Hide it after the visitor scrolls past the heading.
   const arrow = document.querySelector<HTMLAnchorElement>('[data-take-action]');
   const hash = arrow?.getAttribute('href') ?? '';
   const target = hash.startsWith('#') ? document.getElementById(hash.slice(1)) : null;
@@ -24,6 +25,8 @@ const { href } = Astro.props;
 
     const place = () => {
       frame = 0;
+      // Already past the heading (using the composer): get out of the way.
+      arrow.classList.toggle('is-past', !visible && target.getBoundingClientRect().bottom < 0);
       if (!visible) {
         arrow.classList.remove('is-pointing');
         arrow.style.removeProperty('top');

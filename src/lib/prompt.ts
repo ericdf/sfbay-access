@@ -4,7 +4,7 @@
  * Nothing here sends data anywhere.
  */
 
-import { ACCESS_FACTORS, ACTIVITIES } from './activities';
+import { ACCESS_FACTORS, ACTIVITIES, CONNECTIONS } from './activities';
 
 /** Campaign data the composer needs, serialized into each campaign page. */
 export interface PromptCampaign {
@@ -24,12 +24,14 @@ export interface PromptCampaign {
 export interface VisitorInput {
   activities: string[];
   otherActivity: string;
+  /** CONNECTIONS id, or '' */
+  connection: string;
   /** ACCESS_FACTORS ids */
   factors: string[];
   concern: string;
 }
 
-export const EMPTY_INPUT: VisitorInput = { activities: [], otherActivity: '', factors: [], concern: '' };
+export const EMPTY_INPUT: VisitorInput = { activities: [], otherActivity: '', connection: '', factors: [], concern: '' };
 
 export const MAX_FIELD_LENGTH = 2000;
 
@@ -56,11 +58,13 @@ export function hasPersonalInput(input: VisitorInput): boolean {
     input.activities.length > 0 ||
     cleanText(input.otherActivity) !== '' ||
     input.factors.length > 0 ||
+    input.connection !== '' ||
     cleanText(input.concern) !== ''
   );
 }
 
 export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT): string {
+  const connection = CONNECTIONS.find((c) => c.id === input.connection)?.label;
   const factors = ACCESS_FACTORS.filter((f) => input.factors.includes(f.id)).map((f) => f.label);
   const concern = cleanText(input.concern) || 'Not provided';
   const asks = c.asks.map((a) => `- ${a}`).join('\n');
@@ -74,12 +78,13 @@ export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT
     `Decision-maker: ${c.agency}`,
     `Current submission route: ${c.route}`,
     '',
-    'The following are advocacy points drawn from the SFBA report,',
+    'The following are advocacy points drawn from the San Francisco Boardsailing',
+    'Association (SFBA) report,',
     `"${c.reportTitle}."`,
     'They are positions to consider, not claims about my personal experience:',
     asks,
     '',
-    `Source: SFBA, "${c.reportTitle}," ${c.reportPages}`,
+    `Source: San Francisco Boardsailing Association (SFBA), "${c.reportTitle}," ${c.reportPages}`,
     `Report link: ${c.reportUrl ?? 'Not yet publicly available'}`,
   ];
 
@@ -94,20 +99,24 @@ export function buildPrompt(c: PromptCampaign, input: VisitorInput = EMPTY_INPUT
 
   lines.push(
     '',
+    `My connection to this place (if provided): ${connection ?? 'Not provided'}`,
     `Activities I selected (if provided): ${describeActivities(input)}`,
     `How this decision affects my access (if provided): ${factors.length ? factors.join(', ') : 'Not provided'}`,
     `What matters to me (if provided): ${concern}`,
     '',
-    'First, if my personal experience or position is too vague, ask me up to',
-    'TWO short questions that would help personalize the comment. Otherwise,',
-    'draft a concise, persuasive email or public comment in my own voice.',
+    'If I have given you any of the information above, draft a concise, persuasive',
+    'email or public comment in my own voice now, using only what I gave. Do not ask',
+    'follow-up questions first. Do not ask which request matters most: choose the one',
+    'or two that best fit my activities and concerns. If I said I don\'t use the place',
+    'yet, write as someone who wants access, not as a regular user.',
   );
 
   if (!hasPersonalInput(input)) {
     lines.push(
       '',
-      'I have not provided any personal details yet. Before drafting anything,',
-      'ask me those questions first. Do not write a letter that pretends to be personal.',
+      'I have not provided any personal details yet. Before drafting anything, ask me',
+      'up to TWO short questions: how I use or relate to this place, and what I want',
+      'decision-makers to understand. Do not write a letter that pretends to be personal.',
     );
   }
 

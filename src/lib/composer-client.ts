@@ -22,6 +22,7 @@ export function readInput(root: HTMLElement): VisitorInput {
   return {
     activities: checked('activity'),
     otherActivity: value('other_activity'),
+    connection: checked('connection')[0] ?? '',
     factors: checked('factor'),
     concern: value('concern'),
   };
@@ -58,8 +59,6 @@ export function initComposer(root: HTMLElement): void {
   const status = root.querySelector<HTMLElement>('[data-status]');
   const promptField = root.querySelector<HTMLTextAreaElement>('[data-prompt-text]');
   const promptDetails = root.querySelector<HTMLDetailsElement>('[data-prompt-details]');
-  const pasteHelp = root.querySelector<HTMLElement>('[data-paste-help]');
-  const pasteHelpProvider = root.querySelector<HTMLElement>('[data-paste-help-provider]');
   const links = {
     chatgpt: root.querySelector<HTMLAnchorElement>('[data-open="chatgpt"]'),
     claude: root.querySelector<HTMLAnchorElement>('[data-open="claude"]'),
@@ -105,8 +104,6 @@ export function initComposer(root: HTMLElement): void {
         provider === 'chatgpt' ? chatgptHandoff(prompt, data.chatgpt) : claudeHandoff(prompt, data.claude);
       link.href = handoff.url;
       const name = PROVIDER_NAMES[provider];
-      if (pasteHelpProvider) pasteHelpProvider.textContent = name;
-      pasteHelp?.removeAttribute('hidden');
       void copyText(prompt, null).then((ok) => {
         if (ok) {
           say(
@@ -127,7 +124,7 @@ export function initComposer(root: HTMLElement): void {
       refresh();
       const ok = await copyText(currentPrompt(), promptField);
       if (ok) {
-        say('Prompt copied to your clipboard. Paste it into any chatbot.');
+        say('Copied. Now step 2: open ChatGPT or Claude and paste it.');
       } else {
         say("Couldn't copy automatically. The prompt is selected below. Copy it with your device's copy command.");
         showManualCopy();

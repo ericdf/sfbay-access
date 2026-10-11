@@ -18,6 +18,7 @@ function mount(): HTMLElement {
         <input type="checkbox" name="activity" value="swimming" />
         <input type="checkbox" name="activity" value="windsurfing" />
         <input type="text" name="other_activity" />
+        <input type="radio" name="connection" value="use_now" />
         <input type="checkbox" name="factor" value="parking" />
         <input type="checkbox" name="factor" value="water_quality" />
         <textarea name="concern"></textarea>
@@ -25,7 +26,6 @@ function mount(): HTMLElement {
         <a data-open="claude" href="https://claude.ai/new">Claude</a>
         <button type="button" data-copy-prompt>Copy</button>
         <p role="status" data-status></p>
-        <div data-paste-help hidden><span data-paste-help-provider></span></div>
         <details data-prompt-details><textarea readonly data-prompt-text></textarea></details>
       </div>
     </div>`;
@@ -65,8 +65,9 @@ describe('composer (browser)', () => {
     const root = mount();
     root.querySelector<HTMLInputElement>('input[value="swimming"]')!.checked = true;
     root.querySelector<HTMLInputElement>('input[value="parking"]')!.checked = true;
+    root.querySelector<HTMLInputElement>('input[value="use_now"]')!.checked = true;
     root.querySelector<HTMLInputElement>('[name="other_activity"]')!.value = 'snorkeling';
-    expect(readInput(root)).toMatchObject({ activities: ['swimming'], factors: ['parking'], otherActivity: 'snorkeling' });
+    expect(readInput(root)).toMatchObject({ activities: ['swimming'], factors: ['parking'], connection: 'use_now', otherActivity: 'snorkeling' });
   });
 
   it('Claude: copies the prompt and opens claude.ai without a prefill parameter', async () => {
@@ -80,8 +81,18 @@ describe('composer (browser)', () => {
     await flush();
     expect(link.getAttribute('href')).toBe('https://claude.ai/new');
     expect(writeText).toHaveBeenCalledWith(expect.stringContaining('Issue: Protect access to Example Beach'));
-    expect(root.querySelector('[data-paste-help]')!.hasAttribute('hidden')).toBe(false);
     expect(root.querySelector('[data-status]')!.textContent).toMatch(/Prompt copied.*Claude/);
+  });
+
+  it('Copy prompt button says what to do next', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const root = mount();
+    initComposer(root);
+    root.querySelector<HTMLButtonElement>('[data-copy-prompt]')!.click();
+    await flush();
+    expect(writeText).toHaveBeenCalledOnce();
+    expect(root.querySelector('[data-status]')!.textContent).toMatch(/step 2/);
   });
 
   it('when clipboard is denied, shows the prompt for manual copying', async () => {

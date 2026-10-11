@@ -31,3 +31,11 @@ export const ACCESS_FACTORS = [
   { id: 'launch_space', label: 'Launch and landing space' },
   { id: 'abilities', label: 'Access for people of different abilities' },
 ] as const;
+
+/** "What's your connection to this place?" options (single choice). */
+export const CONNECTIONS = [
+  { id: 'use_now', label: 'I use it now' },
+  { id: 'used_before', label: 'I used it before access got harder' },
+  { id: 'would_use', label: "I don't use it yet, but would if access were better" },
+  { id: 'care', label: "I don't use it, but I care about keeping it open" },
+] as const;

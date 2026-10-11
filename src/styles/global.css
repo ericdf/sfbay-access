@@ -538,6 +538,8 @@ summary {
   box-shadow: 0 4px 14px rgb(0 0 0 / 0.25);
   transition:
     top 0.25s ease,
+    opacity 0.2s ease,
+    visibility 0.2s,
     background-color 0.15s ease;
 }
 
@@ -556,6 +558,11 @@ summary {
 .take-action-arrow.is-pointing {
   bottom: auto;
   transform: translateY(-50%);
+}
+
+.take-action-arrow.is-past {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .take-action-arrow.is-pointing .take-action-icon {
@@ -594,4 +601,55 @@ summary {
   .take-action-arrow {
     display: none;
   }
+}
+
+/* Composer steps */
+ol.steps {
+  list-style: none;
+  counter-reset: step;
+  padding: 0;
+  margin: 1.5rem 0 1rem;
+}
+
+ol.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 1rem 3rem;
+  margin: 0;
+  border-left: 2px solid var(--border);
+  margin-left: 1.1rem;
+  padding-left: 2rem;
+}
+
+ol.steps > li:last-child {
+  border-left-color: transparent;
+}
+
+ol.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: -1.15rem;
+  top: -0.1rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--surface);
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.step-title {
+  font-size: 1.1rem;
+  margin: 0.1rem 0 0.4rem;
+}
+
+ol.steps .button-row {
+  margin: 0.5rem 0;
+}
+
+.button-large {
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
 }
